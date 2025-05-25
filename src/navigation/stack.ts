@@ -6,6 +6,8 @@ import Reservation from '../screens/reservation/Reservation';
 import Chat from '../screens/chat/Chat';
 import Wishlist from '../screens/wishlist/Wishlist';
 import Profile from '../screens/profile/Profile';
+import Login from '../screens/login/Login';
+import Register from '../screens/register/Register';
 
 export type RootStackParamList = {
   Home: undefined;
@@ -14,6 +16,8 @@ export type RootStackParamList = {
   Profile: undefined;
   Chat: undefined;
   Onboarding: undefined;
+  Login: undefined;
+  Register: undefined;
 };
 
 export type RouteItem = {
@@ -25,10 +29,20 @@ export type RouteProps = RouteProp<RootStackParamList>;
 
 export type NavigationProps = StackNavigationProp<RootStackParamList>;
 
-const RoutesStack: RouteItem[] = [
+export const RoutesStack: RouteItem[] = [
   {
     path: 'Onboarding',
     component: Onboarding,
+    private: false,
+  },
+    {
+    path: 'Login',
+    component: Login,
+    private: false,
+  },
+    {
+    path: 'Register',
+    component: Register,
     private: false,
   },
   {
@@ -42,3 +56,4 @@ const RoutesStack: RouteItem[] = [
     private:false,
   }
 ];
+
