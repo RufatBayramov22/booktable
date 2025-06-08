@@ -1,12 +1,13 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import tabConfig from './src/navigation/tabs'; // Tab konfiqurasiyasını import edin
+import tabConfig from './src/navigation/tabs'; 
 import { Image } from 'react-native';
 
 const Tab = createBottomTabNavigator();
 
 const HomeTabs = () => (
-  <Tab.Navigator>
+  <Tab.Navigator screenOptions={{
+    headerShown: false,}}>
     {tabConfig.map(tab => (
       <Tab.Screen
         key={tab.name}

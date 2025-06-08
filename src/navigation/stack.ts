@@ -18,6 +18,7 @@ export type RootStackParamList = {
   Onboarding: undefined;
   Login: undefined;
   Register: undefined;
+  HomeTabs: undefined;
 };
 
 export type RouteItem = {

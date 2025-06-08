@@ -17,7 +17,7 @@ function MainNavigator({ authState }: { authState: AuthState }) {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       {authState === 'authenticated' ? (
         <>
-          <Stack.Screen name="Home" component={HomeTabs} />
+          <Stack.Screen name="HomeTabs" component={HomeTabs} />
           {RoutesStack.map((route: RouteItem) => (
             <Stack.Screen
               key={route.path}
@@ -28,29 +28,14 @@ function MainNavigator({ authState }: { authState: AuthState }) {
         </>
       ) : authState === 'registered' ? (
         <>
-          <Stack.Screen
-            name="Login"
-            component={Login}
-          />
-          <Stack.Screen
-            name="Register"
-            component={Register}
-          />
+          <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen name="Register" component={Register} />
         </>
       ) : (
         <>
-          <Stack.Screen
-            name="Onboarding"
-            component={Onboarding}
-          />
-          <Stack.Screen
-            name="Login"
-            component={Login}
-          />
-          <Stack.Screen
-            name="Register"
-            component={Register}
-          />
+          <Stack.Screen name="Onboarding" component={Onboarding} />
+          <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen name="Register" component={Register} />
         </>
       )}
     </Stack.Navigator>
@@ -58,8 +43,7 @@ function MainNavigator({ authState }: { authState: AuthState }) {
 }
 
 const App = () => {
-  // Buna uyğun real auth yoxlanışı backend/token ilə edilə bilər
-  const [authState, setAuthState] = useState<AuthState>('unauthenticated');
+  const [authState, setAuthState] = useState<AuthState>('authenticated'); // Test üçün bunu 'authenticated' et
 
   return (
     <NavigationContainer>

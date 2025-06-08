@@ -76,13 +76,14 @@ const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
             <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
           </TouchableOpacity>
         </View>
+             <TouchableOpacity style={styles.button} onPress={()=>navigation.navigate('Home')}>
+          <Text style={styles.buttonText}>Log in</Text>
+        </TouchableOpacity>
       </View>
 
       {/* Login Button */}
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.button} onPress={handleLogin}>
-          <Text style={styles.buttonText}>Log in</Text>
-        </TouchableOpacity>
+   
         <View style={styles.signUpContainer}>
           <Text style={styles.signUpText}>Don’t have an account? </Text>
           <TouchableOpacity
