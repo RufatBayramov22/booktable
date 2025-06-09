@@ -8,6 +8,7 @@ import Wishlist from '../screens/wishlist/Wishlist';
 import Profile from '../screens/profile/Profile';
 import Login from '../screens/login/Login';
 import Register from '../screens/register/Register';
+import Notification from '../screens/notification/Notification';
 
 export type RootStackParamList = {
   Home: undefined;
@@ -19,6 +20,7 @@ export type RootStackParamList = {
   Login: undefined;
   Register: undefined;
   HomeTabs: undefined;
+  Notification:undefined,
 };
 
 export type RouteItem = {
@@ -55,6 +57,11 @@ export const RoutesStack: RouteItem[] = [
     path: 'Chat',
     component: Chat,
     private:false,
-  }
+  },
+     {
+    path: 'Notification',
+    component: Notification,
+    private:false,
+  },
 ];
 
