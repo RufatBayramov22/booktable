@@ -3,9 +3,17 @@ import React from 'react';
 import {Image} from 'react-native';
 import _styles from './styles';
 import {ScrollView, TextInput} from 'react-native-gesture-handler';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from '../../navigation/stack';
 
 const Home = () => {
   const styles = _styles;
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+
+  const handlePress = ()=>{
+    navigation.navigate('Notification');
+  }
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
@@ -17,9 +25,11 @@ const Home = () => {
           </View>
           <View style={styles.lang}>
             <Image source={require('../../assets/images/icon/usa.png')} />
-            <Image
-              source={require('../../assets/images/icon/notification.png')}
-            />
+            <TouchableOpacity onPress={handlePress}>
+              <Image
+                source={require('../../assets/images/icon/notification.png')}
+              />
+            </TouchableOpacity>
           </View>
         </View>
         <View style={styles.searchBar}>
@@ -118,7 +128,7 @@ const Home = () => {
               </View>
             ))}
           </ScrollView>
-             <TouchableOpacity>
+          <TouchableOpacity>
             <View style={styles.restaurantItem}>
               <Text style={styles.restaurantTitle}>Nearby Restaurants</Text>
               <Image
