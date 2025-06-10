@@ -73,27 +73,56 @@ const _styles = StyleSheet.create({
         color:'#2176FF',
         marginLeft:10,
     },
-  bottomModalOverlay: {
+   overlay: {
     flex: 1,
-    justifyContent: 'flex-end',
-   
+    backgroundColor: 'rgba(0,0,0,0.4)',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  bottomModalContent: {
-    backgroundColor: '#fff',
-    padding: 20,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    elevation: 5,
+  modalContainer: {
+    width: '85%',
+    backgroundColor: 'white',
+    borderRadius: 12,
+    paddingVertical: 20,
+    paddingHorizontal: 16,
+    alignItems: 'center',
+    position: 'relative',
+    bottom:0,
   },
-  modalButton: {
-    paddingVertical: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: '#eee',
+  closeButton: {
+    position: 'absolute',
+    top: 10,
+    left: 10,
+    padding: 8,
+    borderColor: '#A259FF',
+    borderWidth: 1,
+    borderRadius: 4,
   },
-  modalButtonText: {
+  closeText: {
+    fontSize: 18,
+    color: 'black',
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: '600',
+    marginBottom: 20,
+  },
+  optionBox: {
+    width: '100%',
+    backgroundColor: '#f4f4fd',
+    borderRadius: 16,
+    paddingVertical: 12,
+  },
+  optionRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+  },
+
+  optionText: {
     fontSize: 16,
-    textAlign: 'center',
-    color: '#333',
+    color: 'black',
   },
 
 })
