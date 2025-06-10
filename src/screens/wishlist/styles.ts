@@ -5,7 +5,6 @@ const _styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 80,
     gap: 24,
     backgroundColor: '#fff',
   },
@@ -15,6 +14,7 @@ const _styles = StyleSheet.create({
     color: '#070707',
     lineHeight: 24,
     textAlign: 'center',
+    marginTop: 80,
   },
   wishlistCards: {
     display: 'flex',
