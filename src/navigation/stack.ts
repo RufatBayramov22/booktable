@@ -9,6 +9,7 @@ import Profile from '../screens/profile/Profile';
 import Login from '../screens/login/Login';
 import Register from '../screens/register/Register';
 import Notification from '../screens/notification/Notification';
+import SingleRestaurant from '../screens/singleRestaurant/SingleRestaurant';
 
 export type RootStackParamList = {
   Home: undefined;
@@ -21,6 +22,7 @@ export type RootStackParamList = {
   Register: undefined;
   HomeTabs: undefined;
   Notification:undefined,
+  SingleRestaurant:undefined,
 };
 
 export type RouteItem = {
@@ -61,6 +63,11 @@ export const RoutesStack: RouteItem[] = [
      {
     path: 'Notification',
     component: Notification,
+    private:false,
+  },
+      {
+    path: 'SingleRestaurant',
+    component: SingleRestaurant,
     private:false,
   },
 ];
