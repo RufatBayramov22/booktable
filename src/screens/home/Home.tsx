@@ -15,6 +15,12 @@ const Home = () => {
     navigation.navigate('Notification');
   }
 
+  const singleRestaurant = ()=>{
+    navigation.navigate('SingleRestaurant')
+  }
+
+
+
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <View style={styles.home}>
@@ -99,7 +105,8 @@ const Home = () => {
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.scrollContainer}>
             {[1, 2, 3].map((_, index) => (
-              <View key={index} style={styles.restaurantCard}>
+              <TouchableOpacity onPress={singleRestaurant} key={index}>
+              <View  style={styles.restaurantCard}>
                 <Image
                   source={require('../../assets/images/restaurantcard.png')}
                   resizeMode="cover"
@@ -126,6 +133,8 @@ const Home = () => {
                   </View>
                 </View>
               </View>
+              </TouchableOpacity>
+        
             ))}
           </ScrollView>
           <TouchableOpacity>
