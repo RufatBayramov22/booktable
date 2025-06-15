@@ -11,7 +11,7 @@ import Register from '../screens/register/Register';
 import Notification from '../screens/notification/Notification';
 import SingleRestaurant from '../screens/singleRestaurant/SingleRestaurant';
 import FullGalery from '../screens/gallery/FullGalery';
-
+import Fullmenu from '../screens/menu/Fullmenu';
 
 export type RootStackParamList = {
   Home: undefined;
@@ -23,9 +23,10 @@ export type RootStackParamList = {
   Login: undefined;
   Register: undefined;
   HomeTabs: undefined;
-  Notification:undefined,
-  SingleRestaurant:undefined,
-  FullGalery:undefined,
+  Notification: undefined;
+  SingleRestaurant: undefined;
+  FullGalery: undefined;
+  Fullmenu: undefined;
 };
 
 export type RouteItem = {
@@ -43,12 +44,12 @@ export const RoutesStack: RouteItem[] = [
     component: Onboarding,
     private: false,
   },
-    {
+  {
     path: 'Login',
     component: Login,
     private: false,
   },
-    {
+  {
     path: 'Register',
     component: Register,
     private: false,
@@ -56,27 +57,31 @@ export const RoutesStack: RouteItem[] = [
   {
     path: 'Home',
     component: Home,
-    private:false,
+    private: false,
   },
-    {
+  {
     path: 'Chat',
     component: Chat,
-    private:false,
+    private: false,
   },
-     {
+  {
     path: 'Notification',
     component: Notification,
-    private:false,
+    private: false,
   },
-      {
+  {
     path: 'SingleRestaurant',
     component: SingleRestaurant,
-    private:false,
+    private: false,
   },
-{
-  path: 'FullGalery',
-  component: FullGalery, 
-  private: false,
-}
+  {
+    path: 'FullGalery',
+    component: FullGalery,
+    private: false,
+  },
+  {
+    path: 'Fullmenu',
+    component: Fullmenu,
+    private: false,
+  },
 ];
-
