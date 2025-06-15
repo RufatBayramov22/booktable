@@ -4,6 +4,8 @@ import _styles from './style';
 import {Image} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from '../../navigation/stack';
 const Gallery: React.FC = () => {
   const style = _styles;
 const meals = [
@@ -12,7 +14,7 @@ const meals = [
   { id: 3,  },
   { isMore: true }, 
 ];
-const navigation = useNavigation();
+const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   return (
     <View style={style.gallery}>
       <View style={style.galleryHeader}>
@@ -20,7 +22,10 @@ const navigation = useNavigation();
           <Text style={style.galleryTitle}>gallery</Text>
           <Text style={style.number}>(80 items)</Text>
         </View>
-        <TouchableOpacity>
+        <TouchableOpacity 
+            onPress={() => navigation.navigate('FullGalery')}
+        
+        >
           <Text style={style.seeAll}>See all</Text>
         </TouchableOpacity>
       </View>
@@ -32,7 +37,7 @@ const navigation = useNavigation();
           <TouchableOpacity
             key={index}
             style={style.galleryItems}
-            // onPress={() => navigation.navigate('Fullgallery')}
+            onPress={() => navigation.navigate('FullGalery')}
           >
             <Image
               source={require('../../assets/images/gallery.png')}

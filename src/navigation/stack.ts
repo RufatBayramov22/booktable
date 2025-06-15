@@ -10,6 +10,8 @@ import Login from '../screens/login/Login';
 import Register from '../screens/register/Register';
 import Notification from '../screens/notification/Notification';
 import SingleRestaurant from '../screens/singleRestaurant/SingleRestaurant';
+import FullGalery from '../screens/gallery/FullGalery';
+
 
 export type RootStackParamList = {
   Home: undefined;
@@ -23,6 +25,7 @@ export type RootStackParamList = {
   HomeTabs: undefined;
   Notification:undefined,
   SingleRestaurant:undefined,
+  FullGalery:undefined,
 };
 
 export type RouteItem = {
@@ -70,5 +73,10 @@ export const RoutesStack: RouteItem[] = [
     component: SingleRestaurant,
     private:false,
   },
+{
+  path: 'FullGalery',
+  component: FullGalery, 
+  private: false,
+}
 ];
 
