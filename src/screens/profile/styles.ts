@@ -1,12 +1,11 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
 
 export const _styles = StyleSheet.create({
   container: {
     flexGrow: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
-    paddingVertical: 58,
-    paddingHorizontal: 0,
+    paddingHorizontal: 16,
   },
   profileHeader: {
     alignItems: 'center',
@@ -40,14 +39,17 @@ export const _styles = StyleSheet.create({
     height: 18,
   },
   userName: {
+    color: '#070707',
+    textAlign: 'center',
     fontSize: 18,
-    fontWeight: '600',
-    color: '#222',
+    fontStyle: 'normal',
+    fontWeight: 600,
+    lineHeight: 26,
     marginTop: 4,
     marginBottom: 0,
   },
   section: {
-    width: '90%',
+    width: '100%',
     backgroundColor: 'transparent',
     borderRadius: 12,
     marginBottom: 48,
@@ -56,10 +58,10 @@ export const _styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#F7F7F7',
-    borderRadius: 10,
-    paddingVertical: 14,
-    paddingHorizontal: 18,
+    backgroundColor: '#F7F8F8',
+    borderRadius: 12,
+    paddingVertical: 12,
+    paddingHorizontal: 8,
     marginBottom: 6,
   },
   menuIconText: {
@@ -72,14 +74,52 @@ export const _styles = StyleSheet.create({
     marginRight: 14,
   },
   menuText: {
-    fontSize: 16,
-    color: '#222',
-    fontWeight: '500',
+    fontSize: 14,
+    fontStyle: 'normal',
+    fontWeight: 500,
+    lineHeight: 20,
+    color: '#070707',
   },
   arrowIcon: {
-    width: 18,
-    height: 18,
-    tintColor: '#B0B0B0',
+    width: 24,
+    height: 24,
+  },
+  personalInfoHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 24,
+  },
+  personalInfoHeaderTitle: {
+    flex: 1,
+    textAlign: 'center',
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginRight: 24,
+  },
+  divider: {
+    height: 1,
+    backgroundColor: '#E5E5E5',
+    marginBottom: 8,
+  },
+  infoRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 18,
+  },
+  infoIcon: {
+    width: 22,
+    height: 22,
+    marginRight: 12,
+    tintColor: '#82888E',
+  },
+  infoText: {
+    fontSize: 16,
+    color: '#070707',
+    flex: 1,
+  },
+  editButton: {
+    color: '#2176FF',
+    fontSize: 15,
   },
 });
 export default _styles;

@@ -1,10 +1,18 @@
 import { View, Text, Image, TouchableOpacity, ScrollView } from 'react-native';
 import React from 'react';
-
 import _styles from './styles';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from '../../navigation/stack';
 
 const Profile = () => {
   const styles = _styles;
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+
+  const handleProfilePress = () => {
+    navigation.navigate('PersonalInfo');
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
       <View style={styles.profileHeader}>
@@ -17,7 +25,7 @@ const Profile = () => {
         <Text style={styles.userName}>Ethan Caldwell</Text>
       </View>
       <View style={styles.section}>
-        <TouchableOpacity style={styles.menuItem}>
+        <TouchableOpacity style={styles.menuItem} onPress={handleProfilePress}>
           <View style={styles.menuIconText}>
             <Image source={require('../../assets/images/icon/person.png')} style={styles.menuIcon} />
             <Text style={styles.menuText}>Profile</Text>

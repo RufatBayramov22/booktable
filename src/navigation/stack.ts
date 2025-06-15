@@ -9,6 +9,7 @@ import Profile from '../screens/profile/Profile';
 import Login from '../screens/login/Login';
 import Register from '../screens/register/Register';
 import Notification from '../screens/notification/Notification';
+import PersonalInfo from '../screens/profile/PersonalInfo';
 
 export type RootStackParamList = {
   Home: undefined;
@@ -20,7 +21,8 @@ export type RootStackParamList = {
   Login: undefined;
   Register: undefined;
   HomeTabs: undefined;
-  Notification:undefined,
+  Notification: undefined;
+  PersonalInfo: undefined;
 };
 
 export type RouteItem = {
@@ -62,6 +64,11 @@ export const RoutesStack: RouteItem[] = [
     path: 'Notification',
     component: Notification,
     private:false,
+  },
+  {
+    path: 'PersonalInfo',
+    component: PersonalInfo,
+    private: false,
   },
 ];
 
