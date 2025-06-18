@@ -6,8 +6,19 @@ import { Image } from 'react-native';
 const Tab = createBottomTabNavigator();
 
 const HomeTabs = () => (
-  <Tab.Navigator screenOptions={{
-    headerShown: false,}}>
+  <Tab.Navigator 
+    screenOptions={{
+      headerShown: false,
+      tabBarStyle: {
+        backgroundColor: '#fff',
+        borderTopWidth: 1,
+        borderTopColor: '#e5e5e5',
+        paddingBottom: 10,
+        paddingTop: 10,
+        height: 60
+      }
+    }}
+  >
     {tabConfig.map(tab => (
       <Tab.Screen
         key={tab.name}

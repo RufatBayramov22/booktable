@@ -14,7 +14,7 @@ const PersonalInfo = () => {
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.personalInfoHeader}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Image source={require('../../assets/images/icon/left.png')} style={{ width: 24, height: 24 }} />
+          <Image source={require('../../assets/images/icon/goback.png')} style={styles.goBackIcon} />
         </TouchableOpacity>
         <Text style={styles.personalInfoHeaderTitle}>Personal info</Text>
       </View>
@@ -28,12 +28,12 @@ const PersonalInfo = () => {
       </View>
       <View style={styles.section}>
         <View style={styles.infoRow}>
-          <Image source={require('../../assets/images/icon/person_for_profile_page.png')} style={styles.infoIcon} />
+          <Image source={require('../../assets/images/icon/person_blue.png')} style={styles.infoIcon} />
           <Text style={styles.infoText}>Ethan Caldwell</Text>
         </View>
         <View style={styles.divider} />
         <View style={styles.infoRow}>
-          <Image source={require('../../assets/images/icon/phone_profile.png')} style={styles.infoIcon} />
+          <Image source={require('../../assets/images/icon/phone_blue.png')} style={styles.infoIcon} />
           <Text style={styles.infoText}>+9941234567</Text>
           <TouchableOpacity>
             <Text style={styles.editButton}>Edit</Text>
@@ -41,7 +41,7 @@ const PersonalInfo = () => {
         </View>
         <View style={styles.divider} />
         <View style={styles.infoRow}>
-          <Image source={require('../../assets/images/icon/person_for_profile_page.png')} style={styles.infoIcon} />
+          <Image source={require('../../assets/images/icon/email_blue.png')} style={styles.infoIcon} />
           <Text style={styles.infoText}>example@gmail.com</Text>
           <TouchableOpacity>
             <Text style={styles.editButton}>Edit</Text>
