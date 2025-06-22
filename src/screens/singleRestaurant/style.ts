@@ -1,0 +1,107 @@
+import { StyleSheet } from "react-native";
+
+export const _styles = StyleSheet.create({
+singleRestaurant:{
+    width:'100%',
+    display:'flex',
+    flexDirection:'column',
+    gap:16,
+},
+slider:{
+    width:'100%',
+    marginTop:70,
+},
+sliderImg:{
+    width:'100%',
+    objectFit:'cover',
+    position:'relative'
+},
+icon:{
+    position:'absolute',
+    zIndex:9,
+    display:'flex',
+    flexDirection:'row',
+    justifyContent:'space-between',
+    width:'100%',
+    padding:16,
+    alignItems:'center'
+},
+iconFavorite:{
+    backgroundColor:"#F7F8F8",
+    borderRadius:48,
+    width:30,
+    height:30,
+    padding:6,
+},
+details:{
+    display:'flex',
+    flexDirection:'column',
+    width:'100%',
+    paddingHorizontal:16,
+    gap:8,
+
+},
+restaurantTitle:{
+    display:'flex',
+    flexDirection:'column',
+    gap:6,
+
+},
+kitchen:{
+    display:'flex',
+    flexDirection:"row",
+    gap:8,
+    alignItems:'center',
+    width:'100%'
+},
+restaurantName:{
+    fontSize:18,
+    fontWeight:'500',
+    lineHeight:26,
+    color:'#070707',
+},
+mealIcon:{
+    width:24,
+    height:24,
+    aspectRatio:1/1,
+},
+kitchenName:{
+    fontSize:14,
+    fontWeight:'400',
+    color:'#686D71',
+    textAlign:'center',
+
+},
+restaurantInfo:{
+    display:'flex',
+    flexDirection:"row",
+    width:'100%',
+    alignItems:"center",
+    justifyContent:'space-around',
+
+},
+infoTitle:{
+    fontSize:16,
+    fontWeight:'600',
+    lineHeight:24,
+    color:'#070707'
+},
+tabButton: {
+  paddingHorizontal: 12,
+  paddingVertical: 6,
+  borderBottomWidth: 4,
+  borderBottomColor: 'transparent',
+},
+
+activeTabButton: {
+  borderBottomColor: '#007bff',
+},
+
+
+
+activeTabText: {
+  fontWeight: 'bold',
+},
+}) 
+
+export default _styles
