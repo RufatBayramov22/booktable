@@ -30,26 +30,33 @@ galeryBody:{
     alignItems:'center',
     justifyContent:'center',
 },
-btn:{
-    width:'100%',
-    backgroundColor:'#2176FF',
-    borderRadius:48,
-    paddingHorizontal:24,
-    paddingVertical:12,
-    display:'flex',
-    alignItems:'center',
-    justifyContent:'center',
-    position:'absolute',
-    zIndex:99,
-    bottom:100,
-
+btnContainer: {
+  position: 'absolute',
+  bottom: 70,
+  left: 0,
+  right: 0,
+//   backgroundColor: '#fff',
+  paddingHorizontal: 16,
+  paddingVertical: 24,
+  zIndex: 99,
 },
-btnTitle:{
-    fontSize:16,
-    fontWeight:600,
-    lineHeight:24,
-    color:"#Fff"
-}
+
+btn: {
+  width: '100%',
+  backgroundColor: '#2176FF',
+  borderRadius: 48,
+  paddingHorizontal: 24,
+  paddingVertical: 12,
+  alignItems: 'center',
+  justifyContent: 'center',
+},
+
+btnTitle: {
+  fontSize: 16,
+  fontWeight: '600',
+  lineHeight: 24,
+  color: '#fff',
+},
 })
 
 

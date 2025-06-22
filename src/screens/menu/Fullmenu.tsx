@@ -78,7 +78,7 @@ const Fullmenu = () => {
       },
     ],
     Beverages: [
-              {
+      {
         id: 1,
         title: 'Teriyaki Chicken',
         description:
@@ -144,7 +144,7 @@ const Fullmenu = () => {
       },
     ],
     Desserts: [
-              {
+      {
         id: 1,
         title: 'Teriyaki Chicken',
         description:
@@ -255,10 +255,11 @@ const Fullmenu = () => {
             </TouchableOpacity>
           ))}
         </ScrollView>
-        <TouchableOpacity style={style.btn}>
-          <Text style={style.btnTitle}>Book a Table</Text>
-        </TouchableOpacity>
-        
+        <View style={style.btnContainer} >
+          <TouchableOpacity style={style.btn} onPress={()=>navigation.navigate('Booktable')}>
+            <Text style={style.btnTitle}>Book a Table</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );

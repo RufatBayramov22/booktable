@@ -6,6 +6,7 @@ singleRestaurant:{
     display:'flex',
     flexDirection:'column',
     gap:16,
+    position:"relative"
 },
 slider:{
     width:'100%',
@@ -102,6 +103,35 @@ activeTabButton: {
 activeTabText: {
   fontWeight: 'bold',
 },
+btnContainer: {
+  position: 'absolute',
+  bottom: 80,
+  left: 0,
+  right: 0,
+  backgroundColor: '#fff',
+  paddingHorizontal: 16,
+  paddingVertical: 5,
+  zIndex: 99,
+},
+
+btn: {
+  width: '100%',
+  backgroundColor: '#2176FF',
+  borderRadius: 48,
+  paddingHorizontal: 24,
+  marginBottom:20,
+  paddingVertical: 12,
+  alignItems: 'center',
+  justifyContent: 'center',
+},
+
+btnTitle: {
+  fontSize: 16,
+  fontWeight: '600',
+  lineHeight: 24,
+  color: '#fff',
+},
+
 }) 
 
 export default _styles

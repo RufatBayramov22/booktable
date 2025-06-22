@@ -12,6 +12,7 @@ import Notification from '../screens/notification/Notification';
 import SingleRestaurant from '../screens/singleRestaurant/SingleRestaurant';
 import FullGalery from '../screens/gallery/FullGalery';
 import Fullmenu from '../screens/menu/Fullmenu';
+import Booktable from '../screens/booktable/Booktable';
 
 export type RootStackParamList = {
   Home: undefined;
@@ -27,6 +28,7 @@ export type RootStackParamList = {
   SingleRestaurant: undefined;
   FullGalery: undefined;
   Fullmenu: undefined;
+  Booktable:undefined;
 };
 
 export type RouteItem = {
@@ -84,4 +86,10 @@ export const RoutesStack: RouteItem[] = [
     component: Fullmenu,
     private: false,
   },
+  {
+  path:'Booktable',
+  component:Booktable,
+  private:false,
+  }
+
 ];
