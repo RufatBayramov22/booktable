@@ -9,8 +9,8 @@ const _styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   wishlistTitle: {
-    fontSize: 20,
-    fontWeight: '500',
+    fontSize: 18,
+    fontWeight: '600',
     color: '#070707',
     lineHeight: 24,
     textAlign: 'center',

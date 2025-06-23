@@ -26,7 +26,7 @@ const Reservation = () => {
   return (
     <View style={styles.reservations}>
       <Text style={styles.reservationTitle}>Reservations</Text>
-      <ScrollView style={{ width: '100%' }} showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 50 }}>
+      <ScrollView style={{ width: '100%' }} showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 14 }}>
         <View style={styles.reservationCards}>
           {reservations.map(res => (
             <View key={res.id} style={styles.card}>
