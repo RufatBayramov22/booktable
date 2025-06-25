@@ -70,7 +70,7 @@ const Menu: React.FC = () => {
             return (
               <View key={`meal-${index}`} style={style.menuItems}>
                 <Image
-                  source={require('../../assets/images/menumeal.png')}
+                  source={require('../../assets/images/icon/Meals.png')}
                   style={{position: 'relative'}}
                 />
                 <Text style={style.name}>{meal.name}</Text>
@@ -82,7 +82,7 @@ const Menu: React.FC = () => {
 
       {/* Button */}
       <TouchableOpacity style={style.btn}>
-        <Text style={style.btnTitle}>Book a Table</Text>
+        <Text style={style.btnTitle}></Text>
       </TouchableOpacity>
     </View>
   );

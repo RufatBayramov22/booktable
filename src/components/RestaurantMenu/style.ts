@@ -78,7 +78,7 @@ plusText: {
 
 btn:{
     width:'100%',
-    backgroundColor:'#2176FF',
+    // backgroundColor:'#2176FF',
     borderRadius:48,
     paddingHorizontal:24,
     paddingVertical:12,

@@ -32,6 +32,7 @@ galeryBody:{
     alignItems:'center',
     justifyContent:'center',
 },
+
 fixedBtnWrapper: {
   position: 'absolute',
   bottom: 1,

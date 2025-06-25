@@ -107,6 +107,7 @@ export const _styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 
+
   btnTitle: {
     fontSize: 16,
     fontWeight: 600,
@@ -125,6 +126,7 @@ export const _styles = StyleSheet.create({
     alignItems: 'center',
     zIndex: 10,
   },
+
 });
 
 export default _styles;

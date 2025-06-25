@@ -19,7 +19,7 @@ const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
     <View style={style.gallery}>
       <View style={style.galleryHeader}>
         <View style={style.items}>
-          <Text style={style.galleryTitle}>gallery</Text>
+          <Text style={style.galleryTitle}>Gallery</Text>
           <Text style={style.number}>(80 items)</Text>
         </View>
         <TouchableOpacity 
@@ -62,7 +62,7 @@ const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   </View>
 </ScrollView>
 <TouchableOpacity style={style.btn}>
-  <Text style={style.btnTitle}>Book a Table</Text>
+  <Text style={style.btnTitle}></Text>
 </TouchableOpacity>
     </View>
   );
