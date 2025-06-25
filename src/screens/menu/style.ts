@@ -1,29 +1,28 @@
-import { StyleSheet } from "react-native";
+import {StyleSheet} from 'react-native';
 
 export const _styles = StyleSheet.create({
   fullMenu: {
     flex: 1,
     flexDirection: 'column',
-    width: "100%",
+    width: '100%',
     paddingHorizontal: 16,
     gap: 20,
     backgroundColor: '#fff',
-    height:"100%",
+    height: '100%',
   },
 
   fullMenuHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    width: "56%",
-    justifyContent: "space-between",
+    width: '56%',
+    justifyContent: 'space-between',
     marginTop: 80,
-
   },
 
   fullTitle: {
     color: '#000',
     fontSize: 18,
-    fontWeight: "600",
+    fontWeight: '600',
     lineHeight: 26,
   },
 
@@ -64,7 +63,7 @@ export const _styles = StyleSheet.create({
   menuList: {
     paddingHorizontal: 16,
     paddingTop: 20,
-    paddingBottom: 100, 
+    paddingBottom: 100,
   },
 
   card: {
@@ -75,11 +74,9 @@ export const _styles = StyleSheet.create({
     elevation: 2,
     shadowColor: '#000',
     shadowOpacity: 0.14,
-    shadowOffset: { width: 0, height: 0 },
-    shadowRadius:2,
-
+    shadowOffset: {width: 0, height: 0},
+    shadowRadius: 2,
   },
-
 
   cardContent: {
     flexDirection: 'row',
@@ -102,33 +99,32 @@ export const _styles = StyleSheet.create({
   description: {
     fontSize: 13,
     color: '#4E5155',
-    marginBottom:12,
+    marginBottom: 12,
   },
 
   price: {
     fontSize: 15,
     fontWeight: 'bold',
   },
-  btn:{
-    width:'100%',
-    backgroundColor:'#2176FF',
-    borderRadius:48,
-    paddingHorizontal:24,
-    paddingVertical:12,
-    display:'flex',
-    alignItems:'center',
-    justifyContent:'center',
-    position:'absolute',
-    zIndex:99,
-    bottom:50,
 
-},
-btnTitle:{
-    fontSize:16,
-    fontWeight:600,
-    lineHeight:24,
-    color:"#Fff"
-}
+  btnTitle: {
+    fontSize: 16,
+    fontWeight: 600,
+    lineHeight: 24,
+    color: '#Fff',
+  },
+  fixedBtn: {
+    position: 'absolute',
+    bottom: 30,
+    left: 16,
+    right: 16,
+    backgroundColor: '#2176FF',
+    borderRadius: 48,
+    paddingHorizontal: 24,
+    paddingVertical: 12,
+    alignItems: 'center',
+    zIndex: 10,
+  },
 });
 
 export default _styles;
