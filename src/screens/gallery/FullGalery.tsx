@@ -12,6 +12,7 @@ const FullGalery: React.FC = () => {
 
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
+  
   return (
     <View style={style.fullGalery}>
       <View style={style.fullGaleryHeader}>
