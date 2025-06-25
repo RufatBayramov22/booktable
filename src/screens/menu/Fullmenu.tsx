@@ -1,4 +1,4 @@
-import {View, Text, TouchableOpacity} from 'react-native';
+import {View, Text, TouchableOpacity, Dimensions} from 'react-native';
 import React, {useState} from 'react';
 import _style from './style';
 import {Image} from 'react-native';
@@ -211,6 +211,9 @@ const Fullmenu = () => {
     ],
   };
 
+  const screenHeight = Dimensions.get('window').height;
+
+
   const categories = ['Meals', 'Beverages', 'Desserts'] as const;
   type Category = (typeof categories)[number];
 
@@ -255,11 +258,11 @@ const Fullmenu = () => {
             </TouchableOpacity>
           ))}
         </ScrollView>
-        <View style={style.btnContainer} >
-          <TouchableOpacity style={style.btn} onPress={()=>navigation.navigate('Booktable')}>
-            <Text style={style.btnTitle}>Book a Table</Text>
-          </TouchableOpacity>
-        </View>
+        <View style={{backgroundColor: '#fff', padding: 16, position: 'absolute', bottom: 0, width: '100%', height: screenHeight * 0.1}}>
+      <TouchableOpacity style={style.fixedBtn}>
+      <Text style={style.btnTitle}>Book a Table</Text>
+    </TouchableOpacity>
+        </View
       </View>
     </View>
   );

@@ -51,7 +51,7 @@ export const _styles = StyleSheet.create({
     height: 48,
     padding:12,
     gap: 8,
-    width:300,
+    width:310,
   },
   searchIcon: {
     width: 16,
@@ -84,11 +84,12 @@ export const _styles = StyleSheet.create({
     borderWidth:0.4,
     borderColor:'#ADB5BD',
     borderRadius: 8,
+    marginRight: 8,
   },
   restaurants:{
     display: 'flex',
     flexDirection: 'column',
-    gap: 16,
+    gap: 8,
   },
   restaurantItem:{
     display:'flex',

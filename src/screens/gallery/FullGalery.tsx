@@ -1,4 +1,10 @@
-import {View, Text, TouchableOpacity} from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Dimensions,
+  StyleSheet,
+} from 'react-native';
 import React from 'react';
 import _style from './style';
 import {Image} from 'react-native';
@@ -14,6 +20,7 @@ const FullGalery: React.FC = () => {
 
   
   return (
+
     <View style={style.fullGalery}>
       <View style={style.fullGaleryHeader}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -42,6 +49,35 @@ const FullGalery: React.FC = () => {
           </TouchableOpacity>
         </View>
       </View>
+
+    <View style={{flex: 1}}>
+      <View style={style.fullGalery}>
+        <View style={style.fullGaleryHeader}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Image source={require('../../assets/images/icon/left.png')} />
+          </TouchableOpacity>
+          <Text style={style.fullTitle}>Gallery</Text>
+        </View>
+
+        <ScrollView contentContainerStyle={{paddingBottom: 120}}>
+          <View style={style.galeryBody}>
+            {[...Array(8)].map((_, i) => (
+              <Image
+                key={i}
+                source={require('../../assets/images/galeryR.png')}
+              />
+            ))}
+          </View>
+        </ScrollView>
+      </View>
+
+      {/* Fixed tabbar-style button */}
+      <View style={style.fixedBtnWrapper}>
+        <TouchableOpacity style={style.fixedBtn}>
+          <Text style={style.btnTitle}>Book a Table</Text>
+        </TouchableOpacity>
+      </View>
+
     </View>
   );
 };

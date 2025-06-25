@@ -2,19 +2,21 @@ import { StyleSheet } from "react-native";
 
 export const _style = StyleSheet.create({
 fullGalery:{
-    marginTop:80,
     display:'flex',
     flexDirection:'column',
     width:"100%",
     paddingHorizontal:16,
     gap:20,
+    backgroundColor:'#fff',
+    height:'100%',
 },
 fullGaleryHeader:{
     display:'flex',
     flexDirection:'row',
     alignItems:'center',
     width:"56%",
-    justifyContent:"space-between"
+    justifyContent:"space-between",
+    marginTop:80,
 },
 fullTitle:{
     color:'#000',
@@ -30,33 +32,36 @@ galeryBody:{
     alignItems:'center',
     justifyContent:'center',
 },
-btnContainer: {
+
+fixedBtnWrapper: {
   position: 'absolute',
-  bottom: 70,
+  bottom: 1,
   left: 0,
   right: 0,
-//   backgroundColor: '#fff',
+  backgroundColor: '#fff',
+  paddingVertical: 16,
   paddingHorizontal: 16,
-  paddingVertical: 24,
-  zIndex: 99,
+  borderTopWidth: 0.5,
+  borderTopColor: '#E0E0E0',
+  zIndex: 999,
+  elevation: 10, 
 },
 
-btn: {
-  width: '100%',
+fixedBtn: {
   backgroundColor: '#2176FF',
   borderRadius: 48,
-  paddingHorizontal: 24,
-  paddingVertical: 12,
+  paddingVertical: 14,
   alignItems: 'center',
   justifyContent: 'center',
+  bottom: 10,
 },
 
-btnTitle: {
-  fontSize: 16,
-  fontWeight: '600',
-  lineHeight: 24,
-  color: '#fff',
-},
+btnTitle:{
+    fontSize:16,
+    fontWeight:600,
+    lineHeight:24,
+    color:"#Fff"
+}
 })
 
 
