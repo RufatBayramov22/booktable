@@ -49,6 +49,7 @@ const AboutRestaurant: React.FC = () => {
         ))}
       </View>
     </ScrollView>
+    
       </View>
     </View>
   );

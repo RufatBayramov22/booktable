@@ -262,7 +262,7 @@ const Fullmenu = () => {
       <TouchableOpacity style={style.fixedBtn}>
       <Text style={style.btnTitle}>Book a Table</Text>
     </TouchableOpacity>
-        </View
+        </View>
       </View>
     </View>
   );

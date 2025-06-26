@@ -27,10 +27,6 @@ const Menu: React.FC = () => {
     {id: 3, name: 'Ramen Noodles'},
 
   ];
-
-  
-
-
   const meals: MealItem[] = [...allMeals.slice(0, 3), {isMore: true, total: allMeals.length}];
 
   return (

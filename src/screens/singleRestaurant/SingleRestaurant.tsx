@@ -38,7 +38,7 @@ const SingleRestaurant: React.FC = () => {
           </View>
         </View>
       </View>
-      <ScrollView>
+      <ScrollView  >
         <View style={style.details}>
           <View style={style.restaurantTitle}>
             <Text style={style.restaurantName}>
