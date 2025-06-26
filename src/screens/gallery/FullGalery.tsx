@@ -27,7 +27,7 @@ const FullGalery: React.FC = () => {
           <Text style={style.fullTitle}>Gallery</Text>
         </View>
 
-        <ScrollView contentContainerStyle={{paddingBottom: 120}}>
+        <ScrollView>
           <View style={style.galeryBody}>
             {[...Array(8)].map((_, i) => (
               <Image

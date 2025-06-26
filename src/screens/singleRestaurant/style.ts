@@ -6,7 +6,7 @@ singleRestaurant:{
     display:'flex',
     flexDirection:'column',
     gap:16,
-    position:"relative"
+    flex:1,
 },
 slider:{
     width:'100%',
@@ -97,15 +97,12 @@ tabButton: {
 activeTabButton: {
   borderBottomColor: '#007bff',
 },
-
-
-
 activeTabText: {
   fontWeight: 'bold',
 },
 btnContainer: {
-  position: 'absolute',
-  bottom: 80,
+  position: 'relative',
+  bottom: 0,
   left: 0,
   right: 0,
   backgroundColor: '#fff',

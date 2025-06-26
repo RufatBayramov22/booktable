@@ -38,7 +38,7 @@ const SingleRestaurant: React.FC = () => {
           </View>
         </View>
       </View>
-      <ScrollView  >
+      <ScrollView style={{flex:1}}>
         <View style={style.details}>
           <View style={style.restaurantTitle}>
             <Text style={style.restaurantName}>
@@ -98,7 +98,7 @@ const SingleRestaurant: React.FC = () => {
               </Text>
             </TouchableOpacity>
           </View>
-          <View style={{padding: 16, paddingBottom: 100}}>
+          <View style={{padding: 16, }}>
             {activeTab === 'About' && <AboutRestaurant />}
 
             {activeTab === 'Menu' && <Menu />}
