@@ -17,15 +17,15 @@ const DateSelector = () => {
   };
 
   const formatDay = (date: Date) => {
-    return date.toLocaleDateString('en-US', { weekday: 'short' }); // e.g., Mon, Tue
+    return date.toLocaleDateString('en-US', { weekday: 'short' }); 
   };
 
   const formatDayNumber = (date: Date) => {
-    return date.getDate(); // e.g., 1, 2, 3
+    return date.getDate(); 
   };
 
   const formatMonthName = (date: Date) => {
-    return date.toLocaleDateString('en-US', { month: 'short' }); // e.g., May, Jun
+    return date.toLocaleDateString('en-US', { month: 'short' }); 
   };
 
   const isToday = (date: Date) => {
