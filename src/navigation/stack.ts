@@ -13,6 +13,10 @@ import SingleRestaurant from '../screens/singleRestaurant/SingleRestaurant';
 import FullGalery from '../screens/gallery/FullGalery';
 import Fullmenu from '../screens/menu/Fullmenu';
 import Booktable from '../screens/booktable/Booktable';
+import SeatOption from '../screens/seatoptions/SeatOption';
+import ConfirmReserve from '../screens/succesReserve/ConfirmReserve';
+import CancelReserve from '../screens/cancel/CancelReserve';
+import CancelMemoji from '../screens/cancelMemoji/CancelMemoji';
 
 export type RootStackParamList = {
   Home: undefined;
@@ -28,7 +32,12 @@ export type RootStackParamList = {
   SingleRestaurant: undefined;
   FullGalery: undefined;
   Fullmenu: undefined;
-  Booktable:undefined;
+  Booktable: undefined;
+  SeatOption: undefined;
+  ConfirmReserve: undefined;
+  CancelReserve: undefined;
+  CancelMemoji: undefined;
+
 };
 
 export type RouteItem = {
@@ -87,9 +96,29 @@ export const RoutesStack: RouteItem[] = [
     private: false,
   },
   {
-  path:'Booktable',
-  component:Booktable,
-  private:false,
-  }
+    path: 'Booktable',
+    component: Booktable,
+    private: false,
+  },
+  {
+    path: 'SeatOption',
+    component: SeatOption,
+    private: false,
+  },
+  {
+    path: 'ConfirmReserve',
+    component: ConfirmReserve,
+    private: false,
+  },
 
+  {
+    path: 'CancelReserve',
+    component: CancelReserve,
+    private: false,
+  },
+    {
+    path: 'CancelMemoji',
+    component: CancelMemoji,
+    private: false,
+  },
 ];
