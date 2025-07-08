@@ -97,7 +97,7 @@ const handleReserve = () => {
       {/* Modal */}
       <Modal
         visible={isModalVisible}
-        animationType="slide"
+        animationType="fade"
         transparent
         onRequestClose={closeModal}>
         <TouchableWithoutFeedback onPress={closeModal}>

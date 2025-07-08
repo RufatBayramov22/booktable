@@ -22,7 +22,7 @@ const EditNotificationsModal: React.FC<Props> = ({
 }) => {
   return (
     <Modal
-      animationType="none"
+      animationType="fade"
       transparent={true}
       visible={visible}
       onRequestClose={onClose}
