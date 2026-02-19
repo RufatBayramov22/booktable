@@ -1,22 +1,39 @@
-import {View, Text, TouchableOpacity, TextInput, Image, Animated} from 'react-native';
-import React, {useRef} from 'react';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  TextInput,
+  Image,
+  Animated,
+} from 'react-native';
+import React, {useRef, useState} from 'react';
 import _styles from './styles';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RootStackParamList} from '../../navigation/stack';
 import {ScrollView as GHScrollView} from 'react-native-gesture-handler';
+import Language from '../../components/LanguageModal/Language';
+import FilterModal from '../../components/FilterModal/FilterModal';
+import CategoryKitchen from '../../components/CategoryKitchen/CategoryKitchen';
+import MustTry from '../../components/MustTryRestaurant/MustTry';
 
 const Home = () => {
   const styles = _styles;
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const scrollY = useRef(new Animated.Value(0)).current;
-
+  const [selectedLanguage, setSelectedLanguage] = useState<string>('en');
+  const [isLanguageModalVisible, setLanguageModalVisible] = useState(false);
+  const [isFilterModalVisible, setFilterModalVisible] = useState(false);
   const handlePress = () => {
     navigation.navigate('Notification');
   };
 
   const singleRestaurant = () => {
     navigation.navigate('SingleRestaurant');
+  };
+
+  const handleLanguage = () => {
+    setLanguageModalVisible(true);
   };
 
   const renderStickyHeader = () => (
@@ -58,7 +75,18 @@ const Home = () => {
             <Text style={styles.addressTitle}>Baku, Azerbaijan</Text>
           </View>
           <View style={styles.lang}>
-            <Image source={require('../../assets/images/icon/usa.png')} />
+            <TouchableOpacity onPress={handleLanguage}>
+              <Image source={require('../../assets/images/icon/usa.png')} />
+            </TouchableOpacity>
+            <Language
+              visible={isLanguageModalVisible}
+              selected={selectedLanguage}
+              onSelect={lang => {
+                setSelectedLanguage(lang);
+                setLanguageModalVisible(false);
+              }}
+              onClose={() => setLanguageModalVisible(false)}
+            />
             <TouchableOpacity onPress={handlePress}>
               <Image
                 source={require('../../assets/images/icon/notification.png')}
@@ -75,25 +103,17 @@ const Home = () => {
               style={styles.searchIcon}
             />
           </View>
-          <View style={styles.filter}>
+          <TouchableOpacity
+            style={styles.filter}
+            onPress={() => setFilterModalVisible(true)}>
             <Image source={require('../../assets/images/icon/filter.png')} />
-          </View>
+          </TouchableOpacity>
+          <FilterModal
+            visible={isFilterModalVisible}
+            onClose={() => setFilterModalVisible(false)}
+          />
         </View>
-
-        <View style={styles.categories}>
-          <GHScrollView horizontal showsHorizontalScrollIndicator={false}>
-            {[...Array(6)].map((_, i) => (
-              <TouchableOpacity key={i}>
-                <View style={styles.categorie}>
-                  <Image
-                    source={require('../../assets/images/icon/food.png')}
-                  />
-                  <Text>Azerbaijani</Text>
-                </View>
-              </TouchableOpacity>
-            ))}
-          </GHScrollView>
-        </View>
+      <CategoryKitchen   />
       </View>
     </Animated.View>
   );
@@ -112,54 +132,8 @@ const Home = () => {
         )}>
         <View style={[styles.home, {paddingTop: 16}]}>
           <View style={styles.restaurants}>
-            <TouchableOpacity>
-              <View style={styles.restaurantItem}>
-                <Text style={styles.restaurantTitle}>Must-Try Places</Text>
-                <Image
-                  source={require('../../assets/images/icon/right.png')}
-                  style={{width: 20, height: 20}}
-                />
-              </View>
-            </TouchableOpacity>
-
-            <GHScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={styles.scrollContainer}>
-              {[1, 2, 3].map((_, index) => (
-                <TouchableOpacity onPress={singleRestaurant} key={index}>
-                  <View style={styles.restaurantCard}>
-                    <Image
-                      source={require('../../assets/images/restaurantcard.png')}
-                      resizeMode="cover"
-                    />
-                    <View style={styles.restaurantInfo}>
-                      <Text style={styles.restaurantName}>
-                        Golden Dragon Chinese Bistro
-                      </Text>
-                      <View style={styles.restType}>
-                        <Image
-                          source={require('../../assets/images/icon/meal.png')}
-                        />
-                        <Text style={styles.restTypeText}>
-                          Chinese • Japanese • $$
-                        </Text>
-                      </View>
-                      <View style={styles.restType}>
-                        <Image
-                          source={require('../../assets/images/icon/restLocation.png')}
-                        />
-                        <Text style={styles.restTypeText}>
-                          Sunset Boulevard • 3.2km away
-                        </Text>
-                      </View>
-                    </View>
-                  </View>
-                </TouchableOpacity>
-              ))}
-            </GHScrollView>
-
-            <TouchableOpacity>
+            <MustTry/>      
+            <TouchableOpacity >
               <View style={styles.restaurantItem}>
                 <Text style={styles.restaurantTitle}>Nearby Restaurants</Text>
                 <Image
@@ -203,7 +177,7 @@ const Home = () => {
                 </View>
               ))}
             </GHScrollView>
-                 <TouchableOpacity>
+            <TouchableOpacity>
               <View style={styles.restaurantItem}>
                 <Text style={styles.restaurantTitle}>Nearby Restaurants</Text>
                 <Image

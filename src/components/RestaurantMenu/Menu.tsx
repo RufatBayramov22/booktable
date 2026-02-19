@@ -1,33 +1,51 @@
-import {View, Text, TouchableOpacity, Image} from 'react-native';
-import React from 'react';
+import {View, Text, TouchableOpacity, Image, ScrollView} from 'react-native';
+import React, {useEffect, useState} from 'react';
 import _styles from './style';
-import {ScrollView} from 'react-native-gesture-handler';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute, RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RootStackParamList} from '../../navigation/stack';
-
+import axios from 'axios';
 
 type NavigationProp = StackNavigationProp<RootStackParamList, 'Fullmenu'>;
+type MenuRouteProp = RouteProp<RootStackParamList, 'SingleRestaurant'>;
 
 type MealItem = {
-  id?: number;
-  name?: string;
-  isMore?: boolean;
-  total?: number;
+  id: number;
+  name: string;
+  imageUrl: string;
 };
 
 const Menu: React.FC = () => {
   const style = _styles;
   const navigation = useNavigation<NavigationProp>();
+  const route = useRoute<MenuRouteProp>();
+  const {id} = route.params;
 
+  const [meals, setMeals] = useState<MealItem[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const allMeals: MealItem[] = [
-    {id: 1, name: 'Ramen Noodles'},
-    {id: 2, name: 'Ramen Noodles'},
-    {id: 3, name: 'Ramen Noodles'},
+  useEffect(() => {
+    const fetchMeals = async () => {
+      try {
+        const res = await axios.get(
+          `https://booktables-001-site1.anytempurl.com/api/RestaurantMenus/restaurant/${id}/menus`,
+        );
+        setMeals(res.data.data || []);
+      } catch (error) {
+        console.error('Menu yüklənmədi:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  ];
-  const meals: MealItem[] = [...allMeals.slice(0, 3), {isMore: true, total: allMeals.length}];
+    fetchMeals();
+  }, [id]);
+
+  // göstəriləcək 4 menyu
+  const displayMeals =
+    meals.length > 4
+      ? [...meals.slice(0, 3), {id: -1, name: '', imageUrl: '', isMore: true, total: meals.length} as any]
+      : meals.slice(0, 4);
 
   return (
     <View style={style.menu}>
@@ -35,29 +53,29 @@ const Menu: React.FC = () => {
       <View style={style.menuHeader}>
         <View style={style.items}>
           <Text style={style.menuTitle}>Menu</Text>
-          <Text style={style.number}>({allMeals.length} items)</Text>
+          <Text style={style.number}>({meals.length} items)</Text>
         </View>
-        <TouchableOpacity onPress={() => navigation.navigate('Fullmenu')}>
+        <TouchableOpacity onPress={() => navigation.navigate('Fullmenu', {id})}>
           <Text style={style.seeAll}>See all</Text>
         </TouchableOpacity>
       </View>
 
       {/* Body */}
-      <ScrollView>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         <View style={style.menuBody}>
-          {meals.map((meal, index) => {
-            if (meal.isMore) {
+          {displayMeals.map((meal, index) => {
+            if ((meal as any).isMore) {
               return (
                 <TouchableOpacity
                   key={`meal-${index}`}
                   style={style.menuItems}
-                  onPress={() => navigation.navigate('Fullmenu')}>
+                  onPress={() => navigation.navigate('Fullmenu', {id})}>
                   <Image
-                    source={require('../../assets/images/menumeal.png')}
-                    style={{position: 'relative', opacity: 0.4}}
+                    source={{uri: meals[0]?.imageUrl || ''}}
+                    style={{position: 'relative', opacity: 0.4, width: 80, height: 80, borderRadius: 10}}
                   />
                   <View style={style.overlay}>
-                    <Text style={style.plusText}>{meal.total}+</Text>
+                    <Text style={style.plusText}>{(meal as any).total}+</Text>
                   </View>
                 </TouchableOpacity>
               );
@@ -66,8 +84,8 @@ const Menu: React.FC = () => {
             return (
               <View key={`meal-${index}`} style={style.menuItems}>
                 <Image
-                  source={require('../../assets/images/icon/Meals.png')}
-                  style={{position: 'relative'}}
+                  source={{uri: meal.imageUrl}}
+                  style={{position: 'relative', width: 80, height: 80, borderRadius: 10}}
                 />
                 <Text style={style.name}>{meal.name}</Text>
               </View>
@@ -76,7 +94,6 @@ const Menu: React.FC = () => {
         </View>
       </ScrollView>
 
-      {/* Button */}
       <TouchableOpacity style={style.btn}>
         <Text style={style.btnTitle}></Text>
       </TouchableOpacity>

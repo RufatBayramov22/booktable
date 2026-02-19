@@ -1,28 +1,72 @@
 import React, {useState} from 'react';
-import {View, Text, TextInput, TouchableOpacity, Alert} from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  Alert,
+  Image,
+} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import _styles from './styles';
-import {Image} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
+import axios from 'axios';
+import _styles from './styles';
 import {RootStackParamList} from '../../navigation/stack';
-
 const Register: React.FC = () => {
   const [fullName, setFullName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const [passwordConfirm, setPasswordConfirm] = useState<string>('');
   const [phone, setPhone] = useState<string>('');
-  const styles = _styles;
-  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const [rememberMe, setRememberMe] = useState<boolean>(false);
 
-  const handleRegister = () => {
-    if (!fullName || !email || !password || !phone) {
-      Alert.alert('Error', 'Please fill all fields');
-      return;
-    }
-    Alert.alert('Success', `Registered with email: ${email}`);
-  };
+  const styles = _styles;
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
+const handleRegister = async () => {
+  if (!fullName || !email || !password || !passwordConfirm || !phone) {
+    Alert.alert('Error', 'Please fill all fields');
+    return;
+  }
+
+  if (password !== passwordConfirm) {
+    Alert.alert('Error', 'Passwords do not match');
+    return;
+  }
+
+  if (!rememberMe) {
+    Alert.alert('Error', 'Please agree with Terms and Policy');
+    return;
+  }
+
+  try {
+    const res = await axios.post(
+      'https://booktables-001-site1.anytempurl.com/api/Users/createUser',
+      {
+        fullName,
+        username: phone,
+        email,
+        password,
+        passwordConfirm,
+      },
+    );
+
+    console.log('Registered', res.data);
+
+    if (res.status === 200) {
+      await axios.post('https://booktables-001-site1.anytempurl.com/api/Users/sendOtp', {
+        email,
+      });
+
+      Alert.alert('Success', 'Register Success. Check your email for OTP.');
+      navigation.navigate('Otp', { email }); 
+    }
+  } catch (error: any) {
+    const errorMsg = error.response?.data?.message || 'Registration failed';
+    console.error('Register error:', error.response?.data || error.message);
+    Alert.alert('Error', errorMsg);
+  }
+};
   return (
     <View style={styles.container}>
       <View style={styles.registerInfo}>
@@ -75,6 +119,16 @@ const Register: React.FC = () => {
           value={password}
           onChangeText={setPassword}
         />
+
+        <Text style={styles.label}>Confirm Password</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Re-enter your password"
+          secureTextEntry
+          value={passwordConfirm}
+          onChangeText={setPasswordConfirm}
+        />
+
         <View style={styles.rememberMeContainer}>
           <TouchableOpacity
             style={styles.checkboxContainer}
@@ -84,6 +138,7 @@ const Register: React.FC = () => {
               {rememberMe && <Text style={styles.checkmark}>✓</Text>}
             </View>
           </TouchableOpacity>
+
           <View
             style={{
               display: 'flex',
@@ -103,7 +158,7 @@ const Register: React.FC = () => {
                 Terms
               </Text>
             </TouchableOpacity>
-            <Text>and</Text>{' '}
+            <Text>and</Text>
             <Text
               style={{
                 color: '#2176FF',
@@ -115,20 +170,17 @@ const Register: React.FC = () => {
             </Text>
           </View>
         </View>
-           <TouchableOpacity
-          style={styles.button}
-          onPress={() => navigation.navigate('Home')}>
-          {/* Bura duzelmelidi default beledi */}
+
+        <TouchableOpacity style={styles.button} onPress={handleRegister}>
           <Text style={styles.buttonText}>Sign up</Text>
         </TouchableOpacity>
       </View>
 
       <View style={styles.buttonContainer}>
-     
         <View style={styles.signUpContainer}>
           <Text style={styles.signUpText}>Already have an account?</Text>
           <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-            <Text style={styles.signUpLink}>Sign up</Text>
+            <Text style={styles.signUpLink}>Login</Text>
           </TouchableOpacity>
         </View>
       </View>

@@ -2,10 +2,7 @@ import {RouteProp} from '@react-navigation/native';
 import {StackNavigationProp, StackScreenProps} from '@react-navigation/stack';
 import Home from '../screens/home/Home';
 import Onboarding from '../screens/onboarding/Onboarding';
-import Reservation from '../screens/reservation/Reservation';
 import Chat from '../screens/chat/Chat';
-import Wishlist from '../screens/wishlist/Wishlist';
-import Profile from '../screens/profile/Profile';
 import Login from '../screens/login/Login';
 import Register from '../screens/register/Register';
 import Notification from '../screens/notification/Notification';
@@ -17,9 +14,13 @@ import SeatOption from '../screens/seatoptions/SeatOption';
 import ConfirmReserve from '../screens/succesReserve/ConfirmReserve';
 import CancelReserve from '../screens/cancel/CancelReserve';
 import CancelMemoji from '../screens/cancelMemoji/CancelMemoji';
+import SingleChat from '../components/SingleChat/SingleChat';
+import Otp from '../screens/otp/Otp';
+import Personal from '../screens/personal/Personal';
+import HomeTabs from '../../HomeTabs';
 
 export type RootStackParamList = {
-  Home: undefined;
+  HomeTabs: undefined; 
   Reservation: undefined;
   Wishlist: undefined;
   Profile: undefined;
@@ -27,17 +28,18 @@ export type RootStackParamList = {
   Onboarding: undefined;
   Login: undefined;
   Register: undefined;
-  HomeTabs: undefined;
+  Otp: {email: string};
   Notification: undefined;
-  SingleRestaurant: undefined;
+  SingleRestaurant: {id: number};
   FullGalery: undefined;
-  Fullmenu: undefined;
+  Fullmenu: { id: number };
   Booktable: undefined;
   SeatOption: undefined;
   ConfirmReserve: undefined;
   CancelReserve: undefined;
   CancelMemoji: undefined;
-
+  SingleChat: undefined;
+  Personal: undefined;
 };
 
 export type RouteItem = {
@@ -66,9 +68,14 @@ export const RoutesStack: RouteItem[] = [
     private: false,
   },
   {
-    path: 'Home',
-    component: Home,
+    path: 'Otp',
+    component: Otp,
     private: false,
+  },
+  {
+    path: 'HomeTabs',
+    component: HomeTabs,
+    private: true,
   },
   {
     path: 'Chat',
@@ -116,9 +123,19 @@ export const RoutesStack: RouteItem[] = [
     component: CancelReserve,
     private: false,
   },
-    {
+  {
     path: 'CancelMemoji',
     component: CancelMemoji,
+    private: false,
+  },
+  {
+    path: 'SingleChat',
+    component: SingleChat,
+    private: false,
+  },
+  {
+    path: 'Personal',
+    component: Personal,
     private: false,
   },
 ];

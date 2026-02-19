@@ -2,23 +2,40 @@ import {
   View,
   Text,
   TouchableOpacity,
-  Dimensions,
-  StyleSheet,
+  Image,
+  ScrollView,
 } from 'react-native';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import _style from './style';
-import {Image} from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
-import {useNavigation} from '@react-navigation/native';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {RootStackParamList} from '../../navigation/stack';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from '../../navigation/stack';
 
 const FullGalery: React.FC = () => {
   const style = _style;
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
+  const [images, setImages] = useState<string[]>([]);
+
+  useEffect(() => {
+    const fetchImages = async () => {
+      try {
+        const res = await fetch(
+          'https://booktables-001-site1.anytempurl.com/api/RestaurantImages/get-images-by-restaurantId?RestaurantId=1'
+        );
+        const data = await res.json();
+        // API-nin cavab formatına uyğun map et
+        setImages(data.map((item: any) => item.imageUrl));
+      } catch (err) {
+        console.log('Error fetching images:', err);
+      }
+    };
+
+    fetchImages();
+  }, []);
+
   return (
-    <View style={{flex: 1}}>
+    <View style={{ flex: 1 }}>
       <View style={style.fullGalery}>
         <View style={style.fullGaleryHeader}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -29,12 +46,19 @@ const FullGalery: React.FC = () => {
 
         <ScrollView>
           <View style={style.galeryBody}>
-            {[...Array(8)].map((_, i) => (
-              <Image
-                key={i}
-                source={require('../../assets/images/galeryR.png')}
-              />
-            ))}
+            {images.length > 0 ? (
+              images.map((img, i) => (
+                <Image
+                  key={i}
+                  source={{ uri: img }}
+                  style={{ width: 120, height: 120, margin: 5, borderRadius: 8 }}
+                />
+              ))
+            ) : (
+              <Text style={{ textAlign: 'center', marginTop: 20 }}>
+                No images available
+              </Text>
+            )}
           </View>
         </ScrollView>
       </View>
