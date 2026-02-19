@@ -27,7 +27,7 @@ export default [
     displayName: 'Reservation',
     name: 'reservationTab',
     icon: require('../assets/images/icon/reservationIcon.png'),
-    iconActive: require('../assets/images/icon/activeReserve.png'),
+    iconActive: require('../assets/images/icon/fillcalendar.png'),
     component: Reservation,
   },
   {

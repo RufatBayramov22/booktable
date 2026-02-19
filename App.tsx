@@ -1,53 +1,85 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { View, ActivityIndicator } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
-import { RootStackParamList, RouteItem, RoutesStack } from './src/navigation/stack'; 
-import HomeTabs from './HomeTabs'; 
 import Login from './src/screens/login/Login';
 import Register from './src/screens/register/Register';
 import Onboarding from './src/screens/onboarding/Onboarding';
+import Otp from './src/screens/otp/Otp';
+import HomeTabs from './HomeTabs';
+import { RootStackParamList } from './src/navigation/stack';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
-type AuthState = 'unauthenticated' | 'registered' | 'authenticated';
+import { AuthState } from './src/types/AuthState';
+import Personal from './src/screens/personal/Personal';
+import SingleRestaurant from './src/screens/singleRestaurant/SingleRestaurant';
+import FullGalery from './src/screens/gallery/FullGalery';
+import Fullmenu from './src/screens/menu/Fullmenu';
 
-function MainNavigator({ authState }: { authState: AuthState }) {
+function MainNavigator({
+  authState,
+  setAuthState,
+}: {
+  authState: AuthState;
+  setAuthState: React.Dispatch<React.SetStateAction<AuthState>>;
+}) {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       {authState === 'authenticated' ? (
         <>
-          <Stack.Screen name="HomeTabs" component={HomeTabs} />
-          {RoutesStack.map((route: RouteItem) => (
-            <Stack.Screen
-              key={route.path}
-              name={route.path}
-              component={route.component}
-            />
-          ))}
-        </>
-      ) : authState === 'registered' ? (
-        <>
-          <Stack.Screen name="Login" component={Login} />
-          <Stack.Screen name="Register" component={Register} />
+          <Stack.Screen name="HomeTabs" component={HomeTabs} />  
+          <Stack.Screen name="Personal" component={Personal} />  
+          <Stack.Screen name="SingleRestaurant" component={SingleRestaurant} />  
+          <Stack.Screen name="FullGalery" component={FullGalery} />  
+          <Stack.Screen name="Fullmenu" component={Fullmenu} />  
+
+
         </>
       ) : (
         <>
           <Stack.Screen name="Onboarding" component={Onboarding} />
-          <Stack.Screen name="Login" component={Login} />
+           <Stack.Screen name="Login">
+            {(props) => <Login {...props} setAuthState={setAuthState} />}
+          </Stack.Screen>
           <Stack.Screen name="Register" component={Register} />
+          <Stack.Screen name="Otp" component={Otp} />
         </>
       )}
     </Stack.Navigator>
   );
 }
 
+
 const App = () => {
-  const [authState, setAuthState] = useState<AuthState>('authenticated'); // Test üçün bunu 'authenticated' et
+  const [authState, setAuthState] = useState<AuthState>('loading');
+
+  useEffect(() => {
+    const checkToken = async () => {
+      try {
+        const token = await AsyncStorage.getItem('accessToken');
+        if (token) setAuthState('authenticated');
+        else setAuthState('unauthenticated');
+      } catch (error) {
+        setAuthState('unauthenticated');
+      }
+    };
+    checkToken();
+  }, []);
+
+  if (authState === 'loading') {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" color="#000" />
+      </View>
+    );
+  }
 
   return (
     <NavigationContainer>
-      <MainNavigator authState={authState} />
+  <MainNavigator authState={authState} setAuthState={setAuthState} />
       <Toast />
     </NavigationContainer>
   );

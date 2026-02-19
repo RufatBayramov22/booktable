@@ -3,8 +3,13 @@ import React from 'react';
 import _styles from './styles';
 import {TextInput} from 'react-native-gesture-handler';
 import {Image} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from '../../navigation/stack';
+import SingleChat from '../../components/SingleChat/SingleChat';
 const Chat = () => {
   const style = _styles;
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
   return (
     <View style={style.chatSection}>
@@ -19,7 +24,7 @@ const Chat = () => {
         </View>
       </View>
       <View style={style.chatComp}>
-        <TouchableOpacity style={{width:"100%"}}>
+        <TouchableOpacity style={{width:"100%"}} onPress={()=>{navigation.navigate("SingleChat")}}>
           <View style={style.chatBox}>
             <View style={style.chatImg}>
               <Image
@@ -43,3 +48,5 @@ const Chat = () => {
 };
 
 export default Chat;
+
+
