@@ -116,6 +116,12 @@ restaurantCard: {
   elevation: 4,
   width:253,
 },
+restaurantCardImage: {
+  width: '100%',
+  height: 140,
+  borderTopLeftRadius: 12,
+  borderTopRightRadius: 12,
+},
 restaurantInfo:{
   display: 'flex',
   flexDirection:'column',
@@ -140,6 +146,7 @@ restTypeText:{
   fontWeight:'400',
   color:"#9CA3AA",
   lineHeight: 16,
+  flexShrink: 1,
 },
   scrollContainer: {
     paddingBottom: 24, 

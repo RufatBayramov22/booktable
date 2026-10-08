@@ -6,7 +6,8 @@ import _styles from '../../screens/home/styles';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RootStackParamList} from '../../navigation/stack';
-import axios from 'axios';
+import apiRequest from '../../api/apirequest';
+import {FilterValues} from '../FilterModal/FilterModal';
 
 interface Restaurant {
   id: number;
@@ -17,8 +18,33 @@ interface Restaurant {
   latitude: number;
   longitude: number;
   isAviable: boolean;
+  cuisineType?: {
+    id: number;
+    name: string;
+  } | null;
+  restaurantSpecialFeatures?: {
+    id: number;
+    featureName?: string;
+    name?: string;
+    title?: string;
+  }[];
+  restaurantImages?: {
+    id: number;
+    restaurantId: number;
+    restaurantImgUrl: string;
+  }[];
 }
-const MustTry = () => {
+
+interface RestaurantsResponse {
+  data: Restaurant[];
+}
+
+interface MustTryProps {
+  filters?: FilterValues;
+  searchText?: string;
+}
+
+const MustTry: React.FC<MustTryProps> = ({filters, searchText = ''}) => {
   const styles = _styles;
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const [restaurant, setRestaurant] = useState<Restaurant[]>([]);
@@ -31,10 +57,10 @@ const MustTry = () => {
   useEffect(() => {
     const fetchRestaurant = async () => {
       try {
-        const res = await axios.get(
-          'https://booktables-001-site1.anytempurl.com/api/Restaurants/get-all',
+        const res = await apiRequest.get<RestaurantsResponse>(
+          '/Restaurants/get-all',
         );
-        setRestaurant(res.data.data);
+        setRestaurant(res.data.data ?? []);
       } catch (error) {
         console.error('Restoran yüklənmədi:', error);
       } finally {
@@ -52,6 +78,51 @@ const MustTry = () => {
     );
   }
 
+  const filteredRestaurants = restaurant.filter(rest => {
+    const q = searchText.trim().toLowerCase();
+    if (q) {
+      const haystack = `${rest.name} ${rest.about} ${rest.locationAddress}`.toLowerCase();
+      if (!haystack.includes(q)) {
+        return false;
+      }
+    }
+
+    if (filters?.cuisine) {
+      const cuisineText = `${rest.cuisineType?.name || ''} ${rest.about || ''}`.toLowerCase();
+      if (!cuisineText.includes(filters.cuisine.toLowerCase())) {
+        return false;
+      }
+    }
+
+    if (filters?.price) {
+      if (!rest.isPriceRangeVisible) {
+        return false;
+      }
+    }
+
+    if (filters?.seating) {
+      const seatingText = `${rest.about || ''}`.toLowerCase();
+      if (!seatingText.includes(filters.seating.toLowerCase())) {
+        return false;
+      }
+    }
+
+    if (filters?.features?.length) {
+      const featureText = `${rest.about || ''} ${(rest.restaurantSpecialFeatures || [])
+        .map(f => f.featureName || f.name || f.title || '')
+        .join(' ')}`.toLowerCase();
+
+      const hasFeature = filters.features.some(feature =>
+        featureText.includes(feature.toLowerCase()),
+      );
+      if (!hasFeature) {
+        return false;
+      }
+    }
+
+    return true;
+  });
+
   return (
     <View>
       <TouchableOpacity style={{marginBottom: 10}}>
@@ -67,13 +138,18 @@ const MustTry = () => {
         horizontal
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.scrollContainer}>
-        {restaurant.map(rest => (
+        {filteredRestaurants.map(rest => (
           <TouchableOpacity
             onPress={() => singleRestaurant(rest.id)}
             key={rest.id}>
             <View style={styles.restaurantCard}>
               <Image
-                source={require('../../assets/images/restaurantcard.png')}
+                source={
+                  rest.restaurantImages?.[0]?.restaurantImgUrl
+                    ? {uri: rest.restaurantImages[0].restaurantImgUrl}
+                    : require('../../assets/images/restaurantcard.png')
+                }
+                style={styles.restaurantCardImage}
                 resizeMode="cover"
               />
               <View style={styles.restaurantInfo}>
@@ -82,13 +158,21 @@ const MustTry = () => {
                   <Image
                     source={require('../../assets/images/icon/meal.png')}
                   />
-                  <Text style={styles.restTypeText}>{rest.about}</Text>
+                  <Text
+                    style={styles.restTypeText}
+                    numberOfLines={1}
+                    ellipsizeMode="tail">
+                    {rest.about}
+                  </Text>
                 </View>
                 <View style={styles.restType}>
                   <Image
                     source={require('../../assets/images/icon/restLocation.png')}
                   />
-                  <Text style={styles.restTypeText}>
+                  <Text
+                    style={styles.restTypeText}
+                    numberOfLines={1}
+                    ellipsizeMode="tail">
                     {rest.locationAddress}
                   </Text>
                 </View>
@@ -96,6 +180,11 @@ const MustTry = () => {
             </View>
           </TouchableOpacity>
         ))}
+        {filteredRestaurants.length === 0 && (
+          <View style={{paddingVertical: 20, paddingHorizontal: 8}}>
+            <Text style={styles.restTypeText}>No restaurants found</Text>
+          </View>
+        )}
       </GHScrollView>
     </View>
   );

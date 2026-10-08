@@ -7,13 +7,17 @@ import {
 } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import _style from './style';
-import { useNavigation } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../navigation/stack';
+
+type FullGalleryRouteProp = RouteProp<RootStackParamList, 'FullGalery'>;
 
 const FullGalery: React.FC = () => {
   const style = _style;
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+  const route = useRoute<FullGalleryRouteProp>();
+  const {id} = route.params;
 
   const [images, setImages] = useState<string[]>([]);
 
@@ -21,18 +25,27 @@ const FullGalery: React.FC = () => {
     const fetchImages = async () => {
       try {
         const res = await fetch(
-          'https://booktables-001-site1.anytempurl.com/api/RestaurantImages/get-images-by-restaurantId?RestaurantId=1'
-        );
+            `/RestaurantGalleries/get-gallery-by-resturant-id?RestaurantId=${id}`
+          );
         const data = await res.json();
-        // API-nin cavab formatına uyğun map et
-        setImages(data.map((item: any) => item.imageUrl));
+        const list = Array.isArray(data)
+          ? data
+          : Array.isArray(data?.data)
+            ? data.data
+            : [];
+
+        setImages(
+          list
+            .map((item: any) => item.galleryImgUrl || item.imageUrl || item.imgUrl)
+            .filter(Boolean)
+        );
       } catch (err) {
         console.log('Error fetching images:', err);
       }
     };
 
     fetchImages();
-  }, []);
+  }, [id]);
 
   return (
     <View style={{ flex: 1 }}>

@@ -35,6 +35,12 @@ const Onboarding: React.FC = () => {
     }
   };
 
+  const goToLastStep = () => {
+    if (flatListRef.current) {
+      flatListRef.current.scrollToIndex({ index: totalSteps - 1 });
+    }
+  };
+
   return (
     <View style={{ flex: 1 }}>
       <Animated.FlatList
@@ -55,10 +61,11 @@ const Onboarding: React.FC = () => {
           <View style={{ width, flex: 1 }}>
             <StepComponent
               onContinue={goNext}
+              onSkip={goToLastStep}
               currentStep={index + 1}
               totalSteps={totalSteps}
-              scrollX={scrollX}    
-              stepsCount={totalSteps} 
+              scrollX={scrollX}
+              stepsCount={totalSteps}
             />
           </View>
         )}

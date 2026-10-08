@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -9,19 +9,95 @@ import {
 } from 'react-native';
 
 import styles from './styles';
+import apiRequest from '../../api/apirequest';
 import { Image } from 'react-native';
+
+export interface FilterValues {
+  cuisine: string | null;
+  cuisineTypeId?: number;
+  latitude?: number;
+  longitude?: number;
+  radiusInKm?: number;
+  price: string | null;
+  seating: string | null;
+  features: string[];
+  nearMe: boolean;
+}
+
+interface CuisineType {
+  id: number;
+  name: string;
+}
 
 interface Props {
   visible: boolean;
   onClose: () => void;
+  value: FilterValues;
+  onApply: (value: FilterValues) => void;
+  onReset: () => void;
 }
 
-const FilterModal: React.FC<Props> = ({ visible, onClose }) => {
-  const [selectedCuisine, setSelectedCuisine] = useState<string>('Japanese');
-  const [selectedPrice, setSelectedPrice] = useState<string>('$');
-  const [selectedSeating, setSelectedSeating] = useState<string>('Indoor');
-  const [features, setFeatures] = useState<string[]>(['Live Music']);
-  const [nearMe, setNearMe] = useState<boolean>(false);
+const FilterModal: React.FC<Props> = ({ visible, onClose, value, onApply, onReset }) => {
+  const [selectedCuisine, setSelectedCuisine] = useState<string | null>(
+    value.cuisine,
+  );
+  const [selectedCuisineId, setSelectedCuisineId] = useState<number | null>(
+    value.cuisineTypeId ?? null,
+  );
+  const [selectedPrice, setSelectedPrice] = useState<string | null>(value.price);
+  const [selectedSeating, setSelectedSeating] = useState<string | null>(
+    value.seating,
+  );
+  const [features, setFeatures] = useState<string[]>(value.features);
+  const [nearMe, setNearMe] = useState<boolean>(value.nearMe);
+  const [cuisineTypes, setCuisineTypes] = useState<CuisineType[]>([]);
+
+  useEffect(() => {
+    const fetchCuisineTypes = async () => {
+      try {
+        const res = await apiRequest.get('/CuisineTypes/get-all');
+        const raw = res.data?.data ?? res.data;
+        const dataArray = Array.isArray(raw)
+          ? raw
+          : Array.isArray(raw?.data)
+          ? raw.data
+          : [] as unknown[];
+
+        const items = dataArray
+          .map((item: unknown) => {
+            if (typeof item === 'object' && item !== null && 'id' in item && 'name' in item) {
+              return {
+                id: Number((item as any).id),
+                name: String((item as any).name),
+              };
+            }
+            return null;
+          })
+          .filter((item: CuisineType | null): item is CuisineType => item !== null);
+
+        if (items.length) {
+          setCuisineTypes(items);
+        }
+      } catch (error) {
+        console.error('CuisineTypes yüklənmədi:', error);
+      }
+    };
+
+    if (visible) {
+      fetchCuisineTypes();
+    }
+  }, [visible]);
+
+  useEffect(() => {
+    if (visible) {
+      setSelectedCuisine(value.cuisine);
+      setSelectedCuisineId(value.cuisineTypeId ?? null);
+      setSelectedPrice(value.price);
+      setSelectedSeating(value.seating);
+      setFeatures(value.features);
+      setNearMe(value.nearMe);
+    }
+  }, [visible, value]);
 
   const toggleFeature = (feature: string) => {
     setFeatures((prev) =>
@@ -29,6 +105,29 @@ const FilterModal: React.FC<Props> = ({ visible, onClose }) => {
         ? prev.filter((f) => f !== feature)
         : [...prev, feature]
     );
+  };
+
+  const handleApply = () => {
+    onApply({
+      cuisine: selectedCuisine,
+      cuisineTypeId: selectedCuisineId ?? undefined,
+      price: selectedPrice,
+      seating: selectedSeating,
+      features,
+      nearMe,
+    });
+    onClose();
+  };
+
+  const handleReset = () => {
+    setSelectedCuisine(null);
+    setSelectedCuisineId(null);
+    setSelectedPrice(null);
+    setSelectedSeating(null);
+    setFeatures([]);
+    setNearMe(false);
+    onReset();
+    onClose();
   };
 
   return (
@@ -46,32 +145,26 @@ const FilterModal: React.FC<Props> = ({ visible, onClose }) => {
             {/* Cuisine Type */}
             <Text style={styles.sectionTitle}>Cuisine type</Text>
             <View style={styles.grid}>
-              {[
-                'Japanese',
-                'Mediterranean',
-                'Azerbaijani',
-                'Chinese',
-                'Middle Eastern',
-                'Seafood',
-                'World Cuisine',
-                'Korean',
-                'Asian',
-              ].map((item) => (
+              {cuisineTypes.map((item) => (
                 <Pressable
-                  key={item}
+                  key={item.id}
                   style={[
                     styles.option,
-                    selectedCuisine === item && styles.selectedOption,
+                    selectedCuisineId === item.id && styles.selectedOption,
                   ]}
-                  onPress={() => setSelectedCuisine(item)}
+                  onPress={() => {
+                    const isSelected = selectedCuisineId === item.id;
+                    setSelectedCuisineId(isSelected ? null : item.id);
+                    setSelectedCuisine(isSelected ? null : item.name);
+                  }}
                 >
                   <Text
                     style={[
                       styles.optionText,
-                      selectedCuisine === item && styles.selectedOptionText,
+                      selectedCuisineId === item.id && styles.selectedOptionText,
                     ]}
                   >
-                    {item}
+                    {item.name}
                   </Text>
                 </Pressable>
               ))}
@@ -97,7 +190,9 @@ const FilterModal: React.FC<Props> = ({ visible, onClose }) => {
                     styles.option,
                     selectedPrice === price && styles.selectedOption,
                   ]}
-                  onPress={() => setSelectedPrice(price)}
+                  onPress={() =>
+                    setSelectedPrice(prev => (prev === price ? null : price))
+                  }
                 >
                   <Text
                     style={[
@@ -130,7 +225,9 @@ const FilterModal: React.FC<Props> = ({ visible, onClose }) => {
                     styles.option,
                     selectedSeating === seat && styles.selectedOption,
                   ]}
-                  onPress={() => setSelectedSeating(seat)}
+                  onPress={() =>
+                    setSelectedSeating(prev => (prev === seat ? null : seat))
+                  }
                 >
                   <Text
                     style={[
@@ -171,10 +268,10 @@ const FilterModal: React.FC<Props> = ({ visible, onClose }) => {
 
           {/* Action Buttons */}
           <View style={styles.footer}>
-            <TouchableOpacity style={styles.resetButton}>
+            <TouchableOpacity style={styles.resetButton} onPress={handleReset}>
               <Text style={styles.resetText}>Reset</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.applyButton} onPress={onClose}>
+            <TouchableOpacity style={styles.applyButton} onPress={handleApply}>
               <Text style={styles.applyText}>Apply</Text>
             </TouchableOpacity>
           </View>

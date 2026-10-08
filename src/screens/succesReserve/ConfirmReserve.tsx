@@ -1,4 +1,4 @@
-import {CommonActions, useNavigation} from '@react-navigation/native';
+import {CommonActions, RouteProp, useNavigation, useRoute} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useState} from 'react';
 import {
@@ -12,8 +12,25 @@ import {
 } from 'react-native';
 import {RootStackParamList} from '../../navigation/stack';
 import styles from './styles';
+
+type ConfirmReserveRouteProp = RouteProp<RootStackParamList, 'ConfirmReserve'>;
+
+const formatDisplayDate = (dateText?: string) => {
+  if (!dateText) return '-';
+  const date = new Date(dateText);
+  if (Number.isNaN(date.getTime())) return dateText;
+
+  return date.toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  });
+};
+
 const ConfirmReserve = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+  const route = useRoute<ConfirmReserveRouteProp>();
+  const reservation = route.params;
   const style = styles;
   const [modalVisible, setModalVisible] = useState(false);
   const handleCancelPress = () => {
@@ -84,27 +101,27 @@ const ConfirmReserve = () => {
                 <View style={styles.infoContainer}>
                   <View style={styles.infoRow}>
                     <Text style={styles.label}>Name</Text>
-                    <Text style={styles.value}>John Doe</Text>
+                    <Text style={styles.value}>{reservation?.restaurantName || 'Restaurant'}</Text>
                   </View>
                   <View style={styles.infoRow}>
                     <Text style={styles.label}>Date</Text>
-                    <Text style={styles.value}>May 14, 2025</Text>
+                    <Text style={styles.value}>{formatDisplayDate(reservation?.reservationDate)}</Text>
                   </View>
                   <View style={styles.infoRow}>
                     <Text style={styles.label}>Time</Text>
-                    <Text style={styles.value}>09:00 PM</Text>
+                    <Text style={styles.value}>{reservation?.reservationTime || '-'}</Text>
                   </View>
                   <View style={styles.infoRow}>
                     <Text style={styles.label}>No. of Guests</Text>
-                    <Text style={styles.value}>5</Text>
+                    <Text style={styles.value}>{reservation?.guestCount ?? '-'}</Text>
                   </View>
                   <View style={styles.infoRow}>
                     <Text style={styles.label}>Table</Text>
-                    <Text style={styles.value}>Terrace</Text>
+                    <Text style={styles.value}>{reservation?.seatOption || '-'}</Text>
                   </View>
                   <View style={styles.infoRow}>
                     <Text style={styles.label}>Occasion</Text>
-                    <Text style={styles.value}>Birthday</Text>
+                    <Text style={styles.value}>{reservation?.occasion || '-'}</Text>
                   </View>
                 </View>
               </View>

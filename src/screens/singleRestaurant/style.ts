@@ -70,7 +70,6 @@ kitchenName:{
     fontSize:14,
     fontWeight:'400',
     color:'#686D71',
-    textAlign:'center',
 
 },
 restaurantInfo:{

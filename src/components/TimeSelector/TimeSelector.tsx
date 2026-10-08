@@ -13,8 +13,14 @@ const generateTimeSlots = (startHour = 9, endHour = 24, interval = 30) => {
   return times;
 };
 
-const TimeSelector = () => {
-  const [selectedTime, setSelectedTime] = useState<string>('');
+interface TimeSelectorProps {
+  selectedTime?: string;
+  onSelectTime?: (time: string) => void;
+}
+
+const TimeSelector: React.FC<TimeSelectorProps> = ({selectedTime, onSelectTime}) => {
+  const [internalSelectedTime, setInternalSelectedTime] = useState<string>('');
+  const currentSelectedTime = selectedTime ?? internalSelectedTime;
   const times = generateTimeSlots();
 
   return (
@@ -25,11 +31,14 @@ const TimeSelector = () => {
       showsVerticalScrollIndicator={false}
       contentContainerStyle={styles.container}
       renderItem={({ item }) => {
-        const isSelected = item === selectedTime;
+        const isSelected = item === currentSelectedTime;
         return (
           <TouchableOpacity
             style={[styles.timeBox, isSelected && styles.activeBox]}
-            onPress={() => setSelectedTime(item)}
+            onPress={() => {
+              setInternalSelectedTime(item);
+              onSelectTime?.(item);
+            }}
           >
             <Text style={[styles.timeText, isSelected && styles.activeText]}>
               {item}

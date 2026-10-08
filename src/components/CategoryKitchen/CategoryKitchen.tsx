@@ -1,7 +1,10 @@
 import { View, Text, TouchableOpacity, Image } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { ScrollView as GHScrollView } from 'react-native-gesture-handler';
-import axios from 'axios';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from '../../navigation/stack';
+import apiRequest from '../../api/apirequest';
 import _styles from '../../screens/home/styles';
 
 interface Category {
@@ -11,14 +14,29 @@ interface Category {
 
 const CategoryKitchen = () => {
   const styles = _styles;
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const handleCategoryPress = (categoryId: number) => {
+    navigation.navigate('FilteredResults', {
+      filters: {
+        cuisine: null,
+        cuisineTypeId: categoryId,
+        price: null,
+        seating: null,
+        features: [],
+        nearMe: false,
+      },
+      searchText: '',
+    });
+  };
 
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const res = await axios.get(
-          'https://booktables-001-site1.anytempurl.com/api/MenuCategories'
+        const res = await apiRequest.get(
+          '/MenuCategories'
         );
         setCategories(res.data.data); 
       } catch (error) {
@@ -42,7 +60,7 @@ const CategoryKitchen = () => {
     <View style={styles.categories}>
       <GHScrollView horizontal showsHorizontalScrollIndicator={false}>
         {categories.map((cat) => (
-          <TouchableOpacity key={cat.id}>
+          <TouchableOpacity key={cat.id} onPress={() => handleCategoryPress(cat.id)}>
             <View style={styles.categorie}>
               <Image
                 source={require('../../assets/images/icon/food.png')}

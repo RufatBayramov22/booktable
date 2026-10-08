@@ -124,6 +124,23 @@ const _styles = StyleSheet.create({
     fontSize: 16,
     color: 'black',
   },
+  centerContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+  },
+  emptyMessage: {
+    fontSize: 16,
+    fontWeight: '500',
+    color: '#999',
+    textAlign: 'center',
+  },
 
 })
 

@@ -8,7 +8,7 @@ import {
   Image,
 } from 'react-native';
 import _styles from './styles';
-import axios from 'axios';
+import apiRequest from '../../api/apirequest';
 import {RouteProp, useRoute, useNavigation} from '@react-navigation/native';
 import {RootStackParamList} from '../../navigation/stack';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -52,6 +52,48 @@ const Otp = () => {
     }
   };
 
+const getOtpErrorMessage = (error: any): string => {
+  const data = error?.response?.data;
+  if (!data) {
+    return 'Invalid OTP';
+  }
+
+  const payload = typeof data === 'object' && data !== null ? data : {};
+  const inner = typeof payload?.d === 'object' && payload.d !== null ? payload.d : {};
+
+  return (
+    payload?.Message ||
+    payload?.message ||
+    inner?.Message ||
+    inner?.message ||
+    'Invalid OTP'
+  );
+};
+
+const resendOtp = async () => {
+  if (!email) {
+    Alert.alert('Error', 'Email not found. Please try again.');
+    console.warn('Resend OTP: email is missing', { email });
+    return;
+  }
+
+  try {
+    console.log('Resending OTP to email:', email);
+    await apiRequest.post('/Users/sendOtp', { email });
+    setOtp(['', '', '', '']);
+    setTimer(104);
+    Alert.alert('Info', 'A new OTP has been sent to your email.');
+  } catch (resendError: any) {
+    console.error('Resend OTP failed:', {
+      status: resendError?.response?.status,
+      data: resendError?.response?.data,
+      message: resendError?.message,
+    });
+    const errorMessage = resendError?.response?.data?.message || resendError?.response?.data?.Message || 'Unable to resend OTP. Please try again later.';
+    Alert.alert('Error', errorMessage);
+  }
+};
+
 // OTP təsdiq funksiyası
 const verifyOtp = async () => {
   if (otp.some(d => d.trim() === '')) {
@@ -60,40 +102,51 @@ const verifyOtp = async () => {
   }
 
   try {
-    const res = await axios.post(
-      'https://booktables-001-site1.anytempurl.com/api/Users/verifyOtp',
-      { email, otpCode: otp.join('') } 
-    );
-console.log(JSON.stringify(res.data, null, 2));
+    const otpCode = otp.join('');
+    console.log('Verifying OTP:', { email, otpCodeLength: otpCode.length });
+    
+    const res = await apiRequest.post('/Users/verifyOtp', {
+      email,
+      otpCode,
+    });
 
-    console.log('OTP verified:', res.data);
+    console.log('✅ OTP Response:', JSON.stringify(res.data, null, 2));
     Alert.alert('Success', 'OTP Verified!');
-    navigation.navigate('Login'); 
+    navigation.navigate('Login');
   } catch (error: any) {
     if (error.response) {
-      console.error('OTP verify error (server):', error.response.data);
+      console.error('❌ OTP verify error:', {
+        status: error.response.status,
+        data: error.response.data,
+        email,
+        otpCodeLength: otp.join('').length,
+      });
 
-      if (error.response.data?.code === 'OTP_EXPIRED' || error.response.data?.code === 'INVALID_OTP') {
+      const message = getOtpErrorMessage(error);
+      const isOtpExpired =
+        error.response.data?.code === 'OTP_EXPIRED' ||
+        /expired|invalid/i.test(message) ||
+        error.response.data?.StatusCode === 404;
+
+      if (isOtpExpired) {
+        console.log('OTP expired/invalid - prompting to resend');
         try {
-          await axios.post(
-            'https://booktables-001-site1.anytempurl.com/api/Users/sendOtp',
-            { email }
-          );
-          
+          await apiRequest.post('/Users/sendOtp', { email });
           setOtp(['', '', '', '']);
           setTimer(104);
           Alert.alert('Info', 'A new OTP has been sent to your email.');
+          return;
         } catch (resendError) {
           console.error('Resend OTP failed:', resendError);
         }
       }
 
-      Alert.alert('Error', error.response.data?.message || 'Invalid OTP');
+      Alert.alert('Error', message);
     } else if (error.request) {
-      console.error('OTP verify error (no response):', error.request);
+      console.error('❌ OTP verify error (no response):', error.request);
       Alert.alert('Error', 'No response from server. Please try again.');
     } else {
-      console.error('OTP verify error (setup):', error.message);
+      console.error('❌ OTP verify error (setup):', error.message);
       Alert.alert('Error', 'Something went wrong. Please try again.');
     }
   }
@@ -115,7 +168,7 @@ console.log(JSON.stringify(res.data, null, 2));
       <View style={styles.otpContainer}>
         {otp.map((digit, index) => (
           <TextInput
-            key={index}
+            key={`otp-input-${index}`}
             ref={ref => { inputs.current[index] = ref; }}
             style={styles.otpInput}
             keyboardType="number-pad"
@@ -128,7 +181,7 @@ console.log(JSON.stringify(res.data, null, 2));
 
       <View style={styles.textContainer}>
         <Text style={styles.resendText}>Didn’t receive OTP?</Text>
-        <TouchableOpacity onPress={verifyOtp}>
+        <TouchableOpacity onPress={resendOtp}>
           <Text style={styles.resendLink}> Resend code</Text>
         </TouchableOpacity>
         <Text style={styles.timer}>{formattedTimer}</Text>

@@ -7,6 +7,10 @@ const _styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 24,
     backgroundColor: '#fff',
+    flex: 1,
+  },
+  emptyWishlist: {
+    justifyContent: 'flex-start',
   },
   wishlistTitle: {
     fontSize: 18,
@@ -15,6 +19,12 @@ const _styles = StyleSheet.create({
     lineHeight: 24,
     textAlign: 'center',
     marginTop: 80,
+  },
+  emptyContent: {
+    flex: 1,
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   wishlistCards: {
     display: 'flex',
@@ -36,6 +46,8 @@ const _styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 3,
+    width: '100%',
+    paddingHorizontal: 16,
   },
   cardImage: {
     alignSelf: 'stretch',
@@ -87,6 +99,13 @@ const _styles = StyleSheet.create({
     color: '#8A9197',
     lineHeight: 20,
     letterSpacing: -0.28,
+  },
+  emptyMessage: {
+    fontSize: 16,
+    fontWeight: '400',
+    color: '#C0C0C0',
+    textAlign: 'center',
+    marginTop: 16,
   },
 });
 

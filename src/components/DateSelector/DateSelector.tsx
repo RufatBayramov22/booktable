@@ -1,10 +1,21 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, FlatList } from 'react-native';
 
-const daysToShow = 7;
+const defaultDaysToShow = 7;
 
-const DateSelector = () => {
-  const [selectedDate, setSelectedDate] = useState(new Date());
+interface DateSelectorProps {
+  selectedDate?: Date;
+  onSelectDate?: (date: Date) => void;
+  daysToShow?: number;
+}
+
+const DateSelector: React.FC<DateSelectorProps> = ({
+  selectedDate,
+  onSelectDate,
+  daysToShow = defaultDaysToShow,
+}) => {
+  const [internalSelectedDate, setInternalSelectedDate] = useState(new Date());
+  const currentSelectedDate = selectedDate ?? internalSelectedDate;
 
   const getDates = () => {
     const dates = [];
@@ -46,11 +57,14 @@ const DateSelector = () => {
       contentContainerStyle={styles.container}
       renderItem={({ item }) => {
         const isSelected =
-          item.toDateString() === selectedDate.toDateString();
+          item.toDateString() === currentSelectedDate.toDateString();
         return (
           <TouchableOpacity
             style={[styles.dateBox, isSelected && styles.activeBox]}
-            onPress={() => setSelectedDate(item)}
+            onPress={() => {
+              setInternalSelectedDate(item);
+              onSelectDate?.(item);
+            }}
           >
             <Text style={[styles.dayText, isSelected && styles.activeText]}>
               {isToday(item) ? 'Today' : formatDay(item)}

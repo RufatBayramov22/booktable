@@ -2,9 +2,6 @@ import React from 'react';
 import { View, Text, TouchableOpacity, Image } from 'react-native';
 import { _styles } from './styles';
 import DotIndicator from './Dot';
-import { useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList } from '../../navigation/stack';
 
 type Props = {
   onContinue: () => void;
@@ -13,15 +10,12 @@ type Props = {
   onSkip?: () => void;
 };
 
-
-
 const Step1: React.FC<Props> = ({ onContinue, currentStep, totalSteps, onSkip }) => {
   const styles = _styles;
-  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
   return (
     <View style={styles.step}>
-      <TouchableOpacity style={styles.skipContainer} onPress={()=>navigation.navigate('Otp')}>
+      <TouchableOpacity style={styles.skipContainer} onPress={onSkip}>
         <Text style={styles.skip}>Skip</Text>
       </TouchableOpacity>
 

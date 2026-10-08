@@ -1,24 +1,86 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
   Image,
   TouchableOpacity,
-  ScrollView,
   Alert,
+  ActivityIndicator,
 } from 'react-native';
 import styles from './styles';
 import Language from '../../components/LanguageModal/Language';
-import {CommonActions, useNavigation} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RootStackParamList} from '../../navigation/stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {resetToLogin} from '../../navigation/navigationRef';
 import {AuthState} from '../../types/AuthState';
+import apiRequest from '../../api/apirequest';
 
 interface LogoutProps {
   setAuthState: React.Dispatch<React.SetStateAction<AuthState>>;
 }
+
+interface UserProfile {
+  id: number;
+  fullName?: string;
+  FullName?: string;
+  Name?: string;
+  name?: string;
+  username?: string;
+  email?: string;
+  Email?: string;
+  phone?: string;
+  Phone?: string;
+  phoneNumber?: string;
+  PhoneNumber?: string;
+  mobileNumber?: string;
+  MobileNumber?: string;
+}
+
+type ApiUserResponse =
+  | UserProfile
+  | {
+      data?: UserProfile;
+      Data?: UserProfile;
+    };
+
+const extractUserFromResponse = (payload: ApiUserResponse): UserProfile | null => {
+  if (payload && typeof payload === 'object' && 'data' in payload && payload.data) {
+    return payload.data;
+  }
+
+  if (payload && typeof payload === 'object' && 'Data' in payload && payload.Data) {
+    return payload.Data;
+  }
+
+  return payload as UserProfile;
+};
+
+const looksLikeEmail = (value?: string) => !!value && value.includes('@');
+
+const getDisplayName = (user?: UserProfile | null, fallbackName?: string | null) => {
+  const apiName =
+    user?.fullName ||
+    user?.FullName ||
+    user?.Name ||
+    user?.name ||
+    [user?.firstName, user?.lastName].filter(Boolean).join(' ').trim();
+
+  if (apiName) {
+    return apiName;
+  }
+
+  if (fallbackName) {
+    return fallbackName;
+  }
+
+  if (user?.username && !looksLikeEmail(user.username)) {
+    return user.username;
+  }
+
+  return 'User';
+};
 
 const topItems = [
   {label: 'Profile', icon: require('../../assets/images/icon/personIcon.png')},
@@ -43,7 +105,59 @@ const ProfileScreen: React.FC<LogoutProps> = ({setAuthState}) => {
   const [isLanguageModalVisible, setLanguageModalVisible] = useState(false);
   const [selectedLanguage, setSelectedLanguage] =
     useState<string>('Azerbaijani');
+  const [userName, setUserName] = useState('User');
+  const [loadingUser, setLoadingUser] = useState(true);
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const storedFullName = await AsyncStorage.getItem('userFullName');
+      const storedEmail = await AsyncStorage.getItem('userEmail');
+      const localNameFromEmail = storedEmail?.split('@')?.[0] || null;
+      const fallbackName = storedFullName || localNameFromEmail;
+
+      setUserName(fallbackName || 'User');
+
+      try {
+        const token = await AsyncStorage.getItem('accessToken');
+        const storedUserId = await AsyncStorage.getItem('userId');
+        if (!token) {
+          return;
+        }
+
+        const requestConfig = {
+          headers: {Authorization: `Bearer ${token}`},
+        };
+
+        let user: UserProfile | null = null;
+
+        if (storedUserId) {
+          const res = await apiRequest.get<ApiUserResponse>(
+            `/Users/${storedUserId}`,
+            requestConfig,
+          );
+
+          user = extractUserFromResponse(res.data);
+        }
+
+        if (user) {
+          const nextName = getDisplayName(user, fallbackName);
+          setUserName(nextName);
+          await AsyncStorage.setItem('userFullName', nextName);
+        }
+      } catch (error: any) {
+        if (error.response?.status === 401) {
+          await AsyncStorage.multiRemove(['accessToken', 'refreshToken', 'userId', 'userFullName', 'userEmail', 'userPhone']);
+          setAuthState('unauthenticated');
+          resetToLogin();
+        }
+      } finally {
+        setLoadingUser(false);
+      }
+    };
+
+    fetchUser();
+  }, [setAuthState]);
 
   const handleBottomItemPress = (label: string) => {
     switch (label) {
@@ -53,6 +167,7 @@ const ProfileScreen: React.FC<LogoutProps> = ({setAuthState}) => {
       case 'Rate Our App':
         break;
       case 'Privacy Policy':
+        navigation.navigate('PrivacyPolicy');
         break;
       case 'Log Out':
         handleLogout();
@@ -67,22 +182,17 @@ const ProfileScreen: React.FC<LogoutProps> = ({setAuthState}) => {
       const refreshToken = await AsyncStorage.getItem('refreshToken');
 
       if (refreshToken) {
-        await fetch(
-          'https://booktables-001-site1.anytempurl.com/api/Users/logout',
-          {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({refreshToken}),
-          },
+        await apiRequest.post(
+          '/Users/logout',
+          {refreshToken},
         );
       }
 
-      await AsyncStorage.multiRemove(['accessToken', 'refreshToken']);
+      await AsyncStorage.multiRemove(['accessToken', 'refreshToken', 'userId', 'userFullName', 'userEmail', 'userPhone']);
       setAuthState('unauthenticated');
-      // Root navigator səviyyəsində reset
       resetToLogin();
     } catch (error) {
-      await AsyncStorage.multiRemove(['accessToken', 'refreshToken']);
+      await AsyncStorage.multiRemove(['accessToken', 'refreshToken', 'userId', 'userFullName', 'userEmail', 'userPhone']);
       resetToLogin();
     }
   };
@@ -103,14 +213,18 @@ const ProfileScreen: React.FC<LogoutProps> = ({setAuthState}) => {
             />
           </View>
         </View>
-        <Text style={styles.name}>Ethan Caldwell</Text>
+        {loadingUser ? (
+          <ActivityIndicator size="small" color="#000" />
+        ) : (
+          <Text style={styles.name}>{userName}</Text>
+        )}
       </View>
 
       {/* Top Menu */}
       <View style={styles.menuContainer}>
         {topItems.map((item, index) => (
           <TouchableOpacity
-            key={index}
+            key={`top-${item.label}`}
             style={styles.menuItem}
             onPress={() => {
               switch (item.label) {
@@ -121,7 +235,7 @@ const ProfileScreen: React.FC<LogoutProps> = ({setAuthState}) => {
                   navigation.navigate('Reservation');
                   break;
                 case 'Settings':
-                  // navigation.navigate('Settings');
+                  navigation.navigate('Settings');
                   break;
                 default:
                   break;
@@ -143,7 +257,7 @@ const ProfileScreen: React.FC<LogoutProps> = ({setAuthState}) => {
       <View style={[styles.menuContainer, {marginTop: 50}]}>
         {bottomItems.map((item, index) => (
           <TouchableOpacity
-            key={index}
+            key={`bottom-${item.label}`}
             style={styles.menuItem}
             onPress={() => handleBottomItemPress(item.label)}>
             <View style={styles.itemLeft}>
@@ -172,3 +286,4 @@ const ProfileScreen: React.FC<LogoutProps> = ({setAuthState}) => {
 };
 
 export default ProfileScreen;
+  

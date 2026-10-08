@@ -4,15 +4,27 @@ import _styles from './style';
 import {useNavigation, useRoute, RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RootStackParamList} from '../../navigation/stack';
-import axios from 'axios';
+import apiRequest from '../../api/apirequest';
 
 type NavigationProp = StackNavigationProp<RootStackParamList, 'Fullmenu'>;
 type MenuRouteProp = RouteProp<RootStackParamList, 'SingleRestaurant'>;
 
 type MealItem = {
   id: number;
-  name: string;
-  imageUrl: string;
+  name?: string;
+  title?: string;
+  imageUrl?: string;
+  imgUrl?: string;
+};
+
+type MoreItem = {
+  id: -1;
+  isMore: true;
+  total: number;
+};
+
+const isMoreItem = (item: MealItem | MoreItem): item is MoreItem => {
+  return (item as MoreItem).isMore === true;
 };
 
 const Menu: React.FC = () => {
@@ -24,28 +36,42 @@ const Menu: React.FC = () => {
   const [meals, setMeals] = useState<MealItem[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchMeals = async () => {
-      try {
-        const res = await axios.get(
-          `https://booktables-001-site1.anytempurl.com/api/RestaurantMenus/restaurant/${id}/menus`,
-        );
-        setMeals(res.data.data || []);
-      } catch (error) {
-        console.error('Menu yüklənmədi:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
+useEffect(() => {
+  const fetchMeals = async () => {
+    try {
+      console.log('Restaurant ID:', id);
 
-    fetchMeals();
-  }, [id]);
+      const res = await apiRequest.get(
+        `/RestaurantMenus/restaurant/${id}/menus`,
+      );
 
-  // göstəriləcək 4 menyu
-  const displayMeals =
+      console.log('Response:', res.data);
+
+      setMeals(res.data.data || []);
+    } catch (error: any) {
+      console.log('====================');
+      console.log('STATUS:', error?.response?.status);
+      console.log('DATA:', error?.response?.data);
+      console.log('URL:', error?.config?.url);
+      console.log('FULL ERROR:', error);
+      console.log('====================');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchMeals();
+}, [id]);
+
+  // show max 4 tiles, last tile is "+count" when there are more items
+  const remainingCount = meals.length > 3 ? meals.length - 3 : 0;
+  const displayMeals: Array<MealItem | MoreItem> =
     meals.length > 4
-      ? [...meals.slice(0, 3), {id: -1, name: '', imageUrl: '', isMore: true, total: meals.length} as any]
+      ? [...meals.slice(0, 3), {id: -1, isMore: true, total: remainingCount}]
       : meals.slice(0, 4);
+
+  const getMealName = (meal: MealItem) => meal.name || meal.title || 'Food';
+  const getMealImage = (meal: MealItem) => meal.imageUrl || meal.imgUrl || '';
 
   return (
     <View style={style.menu}>
@@ -64,18 +90,23 @@ const Menu: React.FC = () => {
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         <View style={style.menuBody}>
           {displayMeals.map((meal, index) => {
-            if ((meal as any).isMore) {
+            if (isMoreItem(meal)) {
               return (
                 <TouchableOpacity
                   key={`meal-${index}`}
                   style={style.menuItems}
                   onPress={() => navigation.navigate('Fullmenu', {id})}>
                   <Image
-                    source={{uri: meals[0]?.imageUrl || ''}}
-                    style={{position: 'relative', opacity: 0.4, width: 80, height: 80, borderRadius: 10}}
+                    source={
+                      getMealImage(meals[meals.length - 1])
+                        ? {uri: getMealImage(meals[meals.length - 1])}
+                        : require('../../assets/images/menuImg.png')
+                    }
+                    style={{position: 'relative', opacity: 0.4, width: 167, height: 164, borderRadius: 10}}
+                    resizeMode="cover"
                   />
                   <View style={style.overlay}>
-                    <Text style={style.plusText}>{(meal as any).total}+</Text>
+                    <Text style={style.plusText}>{meal.total}+</Text>
                   </View>
                 </TouchableOpacity>
               );
@@ -84,10 +115,17 @@ const Menu: React.FC = () => {
             return (
               <View key={`meal-${index}`} style={style.menuItems}>
                 <Image
-                  source={{uri: meal.imageUrl}}
-                  style={{position: 'relative', width: 80, height: 80, borderRadius: 10}}
+                  source={
+                    getMealImage(meal)
+                      ? {uri: getMealImage(meal)}
+                      : require('../../assets/images/menuImg.png')
+                  }
+                  style={{position: 'relative', width: 167, height: 164, borderRadius: 10}}
+                  resizeMode="cover"
                 />
-                <Text style={style.name}>{meal.name}</Text>
+                <Text style={style.name} numberOfLines={1} ellipsizeMode="tail">
+                  {getMealName(meal)}
+                </Text>
               </View>
             );
           })}

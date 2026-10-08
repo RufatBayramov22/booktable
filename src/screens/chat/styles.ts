@@ -52,6 +52,12 @@ searchBar:{
         alignItems:'flex-start',
         width:"100%"
   },
+  emptyState: {
+    width: '100%',
+    minHeight: 200,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   chatBox: {
     flexDirection: 'row',
     alignItems: 'center',

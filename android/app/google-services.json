@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "780053798586",
+    "project_id": "yerin-567d7",
+    "storage_bucket": "yerin-567d7.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:780053798586:android:da750f363a2aee152cac83",
+        "android_client_info": {
+          "package_name": "com.book"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDmXiMDyFeW-FkhNWFpTkc-T86W7gkfU0A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

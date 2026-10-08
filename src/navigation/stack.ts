@@ -17,6 +17,9 @@ import CancelMemoji from '../screens/cancelMemoji/CancelMemoji';
 import SingleChat from '../components/SingleChat/SingleChat';
 import Otp from '../screens/otp/Otp';
 import Personal from '../screens/personal/Personal';
+import Settings from '../screens/settings/Settings';
+import DeactivateAccount from '../screens/settings/DeactivateAccount';
+import PrivacyPolicy from '../screens/settings/PrivacyPolicy';
 import HomeTabs from '../../HomeTabs';
 
 export type RootStackParamList = {
@@ -30,16 +33,58 @@ export type RootStackParamList = {
   Register: undefined;
   Otp: {email: string};
   Notification: undefined;
+  FilteredResults: {
+    filters: {
+      cuisine: string | null;
+      cuisineTypeId?: number;
+      latitude?: number;
+      longitude?: number;
+      radiusInKm?: number;
+      price: string | null;
+      seating: string | null;
+      features: string[];
+      nearMe: boolean;
+    };
+    searchText?: string;
+  };
   SingleRestaurant: {id: number};
-  FullGalery: undefined;
+  FullGalery: {id: number};
   Fullmenu: { id: number };
-  Booktable: undefined;
-  SeatOption: undefined;
-  ConfirmReserve: undefined;
+  Booktable: {
+    restaurantId: number;
+    restaurantName?: string;
+  };
+  SeatOption: {
+    restaurantId: number;
+    restaurantName?: string;
+    guestCount: number;
+    reservationDate: string;
+    reservationTime: string;
+  };
+  ConfirmReserve:
+    | {
+        reservationId?: number | string;
+        restaurantName?: string;
+        guestCount: number;
+        reservationDate: string;
+        reservationTime: string;
+        seatOption: string;
+        occasion?: string;
+        note?: string;
+      }
+    | undefined;
   CancelReserve: undefined;
   CancelMemoji: undefined;
-  SingleChat: undefined;
+  SingleChat: { 
+    chatId?: string | number; 
+    contactName?: string;
+    restaurantImage?: string;
+    partnerUserId?: string | number;
+  };
   Personal: undefined;
+  Settings: undefined;
+  DeactivateAccount: undefined;
+  PrivacyPolicy: undefined;
 };
 
 export type RouteItem = {
@@ -136,6 +181,21 @@ export const RoutesStack: RouteItem[] = [
   {
     path: 'Personal',
     component: Personal,
+    private: false,
+  },
+  {
+    path: 'Settings',
+    component: Settings,
+    private: false,
+  },
+  {
+    path: 'DeactivateAccount',
+    component: DeactivateAccount,
+    private: false,
+  },
+  {
+    path: 'PrivacyPolicy',
+    component: PrivacyPolicy,
     private: false,
   },
 ];

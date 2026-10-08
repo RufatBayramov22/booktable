@@ -9,6 +9,14 @@ export const _styles = StyleSheet.create({
     marginTop: 64,
     gap: 24,
     padding: 16,
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+  centeredState: {
+    marginTop: 0,
+  },
+  emptyReservations: {
+    justifyContent: 'flex-start',
   },
   reservationTitle: {
     fontSize: 18,
@@ -16,6 +24,30 @@ export const _styles = StyleSheet.create({
     lineHeight: 26,
     textAlign: 'center',
     color: '#000',
+  },
+  emptyContent: {
+    flex: 1,
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  emptyMessage: {
+    fontSize: 16,
+    fontWeight: '400',
+    color: '#C0C0C0',
+    textAlign: 'center',
+  },
+  errorText: {
+    fontSize: 16,
+    fontWeight: '400',
+    color: '#D32F2F',
+    textAlign: 'center',
+    marginBottom: 12,
+  },
+  retryText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#2176FF',
   },
   reservationCards: {
     display: 'flex',
@@ -48,6 +80,11 @@ cardInfo:{
 cardImg:{
 objectFit:'cover',
 
+},
+cardImage: {
+  width: 110,
+  height: 110,
+  borderRadius: 10,
 },
 cardTitle:{
     fontSize:14,
